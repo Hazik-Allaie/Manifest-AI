@@ -302,13 +302,23 @@ Manifest-AI/
 
 ---
 
-## 📜 Submission Deliverables & Documentation Links
+## 🧭 Roadmap (Post-Hackathon)
 
-- **Written Submission Responses**: [docs/WRITTEN_RESPONSES.md](file:///c:/Users/Admin/Documents/APU_Study_Mateial/Projects/Manifest-AI/docs/WRITTEN_RESPONSES.md)
-- **5-Minute Pitch Video Guide**: [docs/PITCH_SCRIPT.md](file:///c:/Users/Admin/Documents/APU_Study_Mateial/Projects/Manifest-AI/docs/PITCH_SCRIPT.md)
-- **System Architecture**: [docs/ARCHITECTURE.md](file:///c:/Users/Admin/Documents/APU_Study_Mateial/Projects/Manifest-AI/docs/ARCHITECTURE.md)
-- **Dashboard Design Specification**: [docs/DESIGN.md](file:///c:/Users/Admin/Documents/APU_Study_Mateial/Projects/Manifest-AI/docs/DESIGN.md)
-- **Implementation Walkthrough**: [walkthrough.md](file:///C:/Users/Admin/.gemini/antigravity-ide/brain/09918f51-d38c-42fa-af7e-bd548ade460e/walkthrough.md)
+- Live inbox ingestion via IMAP / Microsoft Graph API / AS2 EDI
+- TMS webhook synchronization (CargoWise, SAP TM)
+- Multilingual email classification
+- Periodic Vertex AI fine-tuning on accumulated human corrections
+- Natural-language query assistant over the audit history
+- Shipment document version tracking (SI → BL draft v1 → v2 → v3)
 
+---
+
+## 📜 Hackathon Compliance
+
+Built for the **Averis × Monash Hackathon 2026** in accordance with the official problem statement and FAQ:
+- AI is core to the solution (Vertex AI/Gemini powers classification, extraction, and semantic matching — not a bolt-on feature)
+- Fully deployed on Google Cloud infrastructure
+- Low-code, functional prototype (not a no-code submission)
+- Ground truth data (`ground_truth.json`) is never read by pipeline logic — used exclusively via the provided `score_cli.py` for offline evaluation
 ---
 *Built with ❤️ for the SDOC Hackathon 2026.*
