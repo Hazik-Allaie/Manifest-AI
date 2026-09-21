@@ -1,0 +1,10 @@
+{
+  "email_id": "synth_wrong_shipment_id",
+  "subject": "Shipper Verification Discrepancy \u2014 SI-SYNTH-2026-03",
+  "sender": "operations@pacific-logistics.com",
+  "body": "Please compare the shipper party on both documents and confirm alignment.",
+  "attachments": [
+    "attachments/email_synth_wrong_shipment_id_SI.txt",
+    "attachments/email_synth_wrong_shipment_id_BL.txt"
+  ]
+}

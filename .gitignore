@@ -1,0 +1,49 @@
+# Environment / secrets — NEVER commit these
+.env
+*.env.local
+service-account*.json
+*-key.json
+*credentials*.json
+
+# Python
+venv/
+env/
+__pycache__/
+*.pyc
+*.pyo
+.pytest_cache/
+*.egg-info/
+
+# Node / frontend (if dashboard uses npm)
+node_modules/
+dist/
+build/
+.next/
+
+# OS / editor junk
+.DS_Store
+Thumbs.db
+.vscode/
+.idea/
+
+# Logs
+*.log
+logs/
+
+# Generated submission files (keep these out of version control —
+# regenerate them, don't diff them)
+submission.json
+*.local_score.json
+
+# Local test artifacts, downloads, and evidence (Bucket 3)
+downloads_test/
+*evidence*.json
+*evidence*.png
+
+# Firebase CLI cache
+.firebase/
+
+# Reminder: ground_truth.json is legitimately in local-server/data-advanced/
+# as organizer reference data — it is fine to have it in the repo, but no
+# pipeline code should ever import/read it. Do not add it here; it is not a
+# secret, just off-limits to pipeline logic (see docs/ANTIGRAVITY.md).

@@ -1,0 +1,410 @@
+{
+  "email_001": {
+    "category": "BL_COMPARISON",
+    "status": "OK",
+    "has_defect": false,
+    "defect_fields": [],
+    "review_reason": null,
+    "po_number": "PO 26001",
+    "customer": "ACME Textiles Sdn Bhd",
+    "subject": "Re: Final Draft BL - 2x40HQ Cotton Yarns",
+    "tags": {
+      "shipper": "ACME MY",
+      "consignee": "Carol NY",
+      "port_pair": "SIN > RTM",
+      "weight": "44,200 kg"
+    },
+    "latency": "2m 14s",
+    "processed_at": "2026-09-19T09:14:00Z",
+    "field_results": [
+      {"field_name": "shipper", "si_value": "ACME Textiles Sdn Bhd", "bl_value": "ACME Textiles Sdn Bhd", "match": true, "source_snippet": "Shipper: ACME Textiles Sdn Bhd"},
+      {"field_name": "consignee", "si_value": "Global Freight Co.", "bl_value": "Global Freight Co.", "match": true, "source_snippet": "Consignee: Global Freight Co."},
+      {"field_name": "notify_party", "si_value": "Global Freight Co.", "bl_value": "Global Freight Co.", "match": true, "source_snippet": "Notify: Global Freight Co."},
+      {"field_name": "port_of_loading", "si_value": "Port Klang", "bl_value": "Port Klang", "match": true, "source_snippet": "Load Port: Port Klang"},
+      {"field_name": "port_of_discharge", "si_value": "Singapore", "bl_value": "Singapore", "match": true, "source_snippet": "Port of Discharge: Singapore"},
+      {"field_name": "container_count", "si_value": "3", "bl_value": "3", "match": true, "source_snippet": "Containers: 3 x 40HC"},
+      {"field_name": "gross_weight_kg", "si_value": "22000", "bl_value": "22000", "match": true, "source_snippet": "Gross Weight: 22,000 KG"}
+    ],
+    "timeline": [
+      {"time": "09:12", "stage": "Email received"},
+      {"time": "09:12", "stage": "Classified as BL_COMPARISON"},
+      {"time": "09:13", "stage": "SI extracted"},
+      {"time": "09:13", "stage": "BL extracted"},
+      {"time": "09:14", "stage": "7 fields compared"},
+      {"time": "09:14", "stage": "No mismatch detected"}
+    ]
+  },
+
+  "email_012": {
+    "category": "BL_COMPARISON",
+    "status": "OK",
+    "has_defect": false,
+    "defect_fields": [],
+    "review_reason": null,
+    "po_number": "PO 26188",
+    "customer": "Pacific Grain Corp",
+    "subject": "BL Confirmation: 1,200 MT Bulk Wheat Shipment",
+    "tags": {
+      "shipper": "PacGrain AU",
+      "consignee": "IndoFlour ID",
+      "port_pair": "MEL > JKT",
+      "weight": "1,200,000 kg"
+    },
+    "latency": "48s",
+    "sub_status": "Autonomous EDI Injected • 48s ago",
+    "processed_at": "2026-09-19T09:48:00Z",
+    "field_results": [
+      {"field_name": "shipper", "si_value": "Pacific Grain Corp Pty", "bl_value": "Pacific Grain Corp Pty", "match": true, "source_snippet": "Shipper: Pacific Grain Corp Pty"},
+      {"field_name": "consignee", "si_value": "PT IndoFlour Perkasa", "bl_value": "PT IndoFlour Perkasa", "match": true, "source_snippet": "Consignee: PT IndoFlour Perkasa"},
+      {"field_name": "notify_party", "si_value": "PT IndoFlour Perkasa", "bl_value": "PT IndoFlour Perkasa", "match": true, "source_snippet": "Notify: PT IndoFlour Perkasa"},
+      {"field_name": "port_of_loading", "si_value": "Port of Melbourne", "bl_value": "Melbourne (AUMEL)", "match": true, "source_snippet": "POL: Melbourne"},
+      {"field_name": "port_of_discharge", "si_value": "Tanjung Priok", "bl_value": "Jakarta (IDJKT)", "match": true, "source_snippet": "POD: Tanjung Priok, Jakarta"},
+      {"field_name": "container_count", "si_value": "40", "bl_value": "40", "match": true, "source_snippet": "Total Containers: 40 Units"},
+      {"field_name": "gross_weight_kg", "si_value": "1200000", "bl_value": "1200000", "match": true, "source_snippet": "Total Mass: 1,200,000 KGS"}
+    ],
+    "timeline": [
+      {"time": "09:47", "stage": "Email received"},
+      {"time": "09:47", "stage": "Classified as BL_COMPARISON"},
+      {"time": "09:47", "stage": "SI extracted"},
+      {"time": "09:48", "stage": "BL extracted"},
+      {"time": "09:48", "stage": "7 fields compared"},
+      {"time": "09:48", "stage": "No mismatch detected — Auto-cleared to EDI"}
+    ]
+  },
+
+  "email_002": {
+    "category": "BL_COMPARISON",
+    "status": "MISMATCH",
+    "has_defect": true,
+    "defect_fields": ["container_count"],
+    "review_reason": null,
+    "po_number": "PO 26067",
+    "carrier_bl_ref": "#ONEY-99214",
+    "customer": "Vital Solutions SG",
+    "subject": "Urgent: BL Audit Request - Chemical Consignment",
+    "discrepancy_title": "Container Count Mismatch (field: container_count)",
+    "discrepancy_delta": "1 CRITICAL DELTA",
+    "si_display_val": "3 x 40HC",
+    "bl_display_val": "4 x 40HC",
+    "explainability": "OCR snippet: \"TOTAL CONTAINERS: FOUR (4) 40 HIGH CUBE UNITS\"",
+    "processed_at": "2026-09-19T10:34:00Z",
+    "field_results": [
+      {
+        "field_name": "shipper",
+        "si_value": "Vital Solutions SG Pte",
+        "bl_value": "Vital Solutions SG Pte Ltd",
+        "match": true,
+        "source_snippet": "Fuzzy score: 98.4% (Entity match validated via UEN Registry)"
+      },
+      {
+        "field_name": "consignee",
+        "si_value": "Apex Chemicals B.V.",
+        "bl_value": "Apex Chemicals B.V.",
+        "match": true,
+        "source_snippet": "Exact match on Bill of Lading Box 2"
+      },
+      {
+        "field_name": "notify_party",
+        "si_value": "SAME AS CONSIGNEE",
+        "bl_value": "SAME AS CONSIGNEE",
+        "match": true,
+        "source_snippet": "Standard maritime clause identified"
+      },
+      {
+        "field_name": "port_of_loading",
+        "si_value": "Singapore (SGSIN)",
+        "bl_value": "Port of Singapore",
+        "match": true,
+        "source_snippet": "UN/LOCODE validated: SGSIN"
+      },
+      {
+        "field_name": "port_of_discharge",
+        "si_value": "Rotterdam (NLRTM)",
+        "bl_value": "Rotterdam APM Terminals",
+        "match": true,
+        "source_snippet": "UN/LOCODE validated: NLRTM"
+      },
+      {
+        "field_name": "container_count",
+        "si_value": "3 (SI line 14)",
+        "bl_value": "4 (Draft BL Box 7)",
+        "match": false,
+        "source_snippet": "Δ 1 Extra Container (OCR Box 7: \"TOTAL FOUR (4) 40 HIGH CUBE UNITS\")"
+      },
+      {
+        "field_name": "gross_weight_kg",
+        "si_value": "64,880.00 KGS",
+        "bl_value": "64,835.00 KGS",
+        "match": true,
+        "source_snippet": "Weight variance within 0.1% maritime tolerance"
+      }
+    ],
+    "timeline": [
+      {"time": "10:32:04", "stage": "Email Ingested (Classified as BL_COMPARISON 99.1% conf)"},
+      {"time": "10:33:12", "stage": "Dual Parsing Complete (SI structured schema & OCR Box 7 extracted)"},
+      {"time": "10:34:02", "stage": "Discrepancy Flagged (Field container_count mismatched: 3 vs 4)"},
+      {"time": "10:34:05", "stage": "Triage Escalation (Routed to Operator Kanban Queue)"},
+      {"time": "10:38:15", "stage": "Resolution Pending (Awaiting customer response to draft notice)"}
+    ]
+  },
+
+  "email_008_mismatch": {
+    "category": "BL_COMPARISON",
+    "status": "MISMATCH",
+    "has_defect": true,
+    "defect_fields": ["gross_weight_kg"],
+    "review_reason": null,
+    "po_number": "PO 26112",
+    "carrier_bl_ref": "#MSKU-82019",
+    "customer": "Apex Precision Ltd",
+    "subject": "Weight variance: SI reads 18,400 kg vs Carrier BL 19,850 kg",
+    "discrepancy_title": "Gross Weight Variance (field: gross_weight_kg)",
+    "discrepancy_delta": "WEIGHT DELTA",
+    "delta_text": "+1,450 kg excess",
+    "si_display_val": "18,400 KG",
+    "bl_display_val": "19,850 KG",
+    "explainability": "OCR Box 11: \"GROSS CARGO WEIGHT: 19,850.00 KGS\"",
+    "processed_at": "2026-09-19T10:45:00Z",
+    "field_results": [
+      {"field_name": "shipper", "si_value": "Apex Precision Ltd", "bl_value": "Apex Precision Ltd", "match": true, "source_snippet": "Shipper Box 1"},
+      {"field_name": "consignee", "si_value": "Precision Parts GmbH", "bl_value": "Precision Parts GmbH", "match": true, "source_snippet": "Consignee Box 2"},
+      {"field_name": "notify_party", "si_value": "Precision Parts GmbH", "bl_value": "Precision Parts GmbH", "match": true, "source_snippet": "Notify Box 3"},
+      {"field_name": "port_of_loading", "si_value": "Port Klang (MYPKG)", "bl_value": "Port Klang (MYPKG)", "match": true, "source_snippet": "POL Box 4"},
+      {"field_name": "port_of_discharge", "si_value": "Hamburg (DEHAM)", "bl_value": "Hamburg (DEHAM)", "match": true, "source_snippet": "POD Box 5"},
+      {"field_name": "container_count", "si_value": "1 x 40HC", "bl_value": "1 x 40HC", "match": true, "source_snippet": "1 Container listed"},
+      {"field_name": "gross_weight_kg", "si_value": "18,400 KG", "bl_value": "19,850 KG", "match": false, "source_snippet": "Weight variance: +1,450 kg (+7.8% exceeds 0.5% VGM tolerance)"}
+    ],
+    "timeline": [
+      {"time": "10:42", "stage": "Email received"},
+      {"time": "10:43", "stage": "Classified as BL_COMPARISON"},
+      {"time": "10:44", "stage": "SI and Draft BL extracted"},
+      {"time": "10:45", "stage": "Weight variance detected (> 5% threshold)"}
+    ]
+  },
+
+  "email_003": {
+    "category": "BL_COMPARISON",
+    "status": "NEEDS_REVIEW",
+    "has_defect": false,
+    "defect_fields": [],
+    "review_reason": "missing_value",
+    "subgroup": "missing_value",
+    "po_number": "PO 26099",
+    "carrier_bl_ref": "#MSKU-99412",
+    "customer": "Coastal Traders Ltd",
+    "subject": "SI Submission PO# 26099 - Coastal Traders",
+    "exception_badge": "MISSING_VALUE",
+    "missing_items": [
+      {"label": "Missing Shipper Entity", "detail": "Field left blank in SI"},
+      {"label": "Gross Weight missing", "detail": "SI reads: \"GROSS WEIGHT: _______\""}
+    ],
+    "processed_at": "2026-09-19T11:06:00Z",
+    "field_results": [
+      {"field_name": "shipper", "si_value": "??? (Blank)", "bl_value": "Coastal Traders Ltd", "match": null, "source_snippet": "Shipper: ???"},
+      {"field_name": "consignee", "si_value": "Coastal Traders Ltd", "bl_value": "Coastal Traders Ltd", "match": true, "source_snippet": "Consignee: Coastal Traders Ltd"},
+      {"field_name": "notify_party", "si_value": "Coastal Traders Ltd", "bl_value": "Coastal Traders Ltd", "match": true, "source_snippet": "Notify: Coastal Traders Ltd"},
+      {"field_name": "port_of_loading", "si_value": "Port Klang", "bl_value": "Port Klang", "match": true, "source_snippet": "Port of Loading: Port Klang"},
+      {"field_name": "port_of_discharge", "si_value": "Jakarta", "bl_value": "Jakarta", "match": true, "source_snippet": "Port of Discharge: Jakarta"},
+      {"field_name": "container_count", "si_value": "2", "bl_value": "2", "match": true, "source_snippet": "Containers: 2 x 20GP"},
+      {"field_name": "gross_weight_kg", "si_value": "_______ (Unset)", "bl_value": "15,000 KG", "match": null, "source_snippet": "GROSS WEIGHT: _______"}
+    ],
+    "timeline": [
+      {"time": "11:05:00", "stage": "Email received"},
+      {"time": "11:05:15", "stage": "Classified as BL_COMPARISON"},
+      {"time": "11:06:00", "stage": "SI extracted with missing fields"},
+      {"time": "11:06:10", "stage": "Blank required field detected (shipper, gross_weight)"},
+      {"time": "11:06:30", "stage": "Sent for human review — missing_value"}
+    ]
+  },
+
+  "email_004": {
+    "category": "BL_COMPARISON",
+    "status": "NEEDS_REVIEW",
+    "has_defect": false,
+    "defect_fields": [],
+    "review_reason": "missing_attachment",
+    "subgroup": "missing_attachment",
+    "po_number": "PO 26044",
+    "carrier_bl_ref": "PENDING",
+    "customer": "Nordic Freight AB",
+    "subject": "Booking Confirmation & Instructions - Gothenburg",
+    "exception_badge": "MISSING_ATTACHMENT",
+    "missing_items": [
+      {"label": "Attachment Exception", "detail": "Expected BL & SI pair. Only SI_gothenburg.pdf detected. Carrier draft not attached."}
+    ],
+    "processed_at": "2026-09-19T12:01:00Z",
+    "field_results": [],
+    "timeline": [
+      {"time": "12:00", "stage": "Email received"},
+      {"time": "12:00", "stage": "Classified as BL_COMPARISON"},
+      {"time": "12:01", "stage": "Missing attachment detected — expected BL, only SI found"},
+      {"time": "12:01", "stage": "Sent for human review — missing_attachment"}
+    ]
+  },
+
+  "email_501": {
+    "category": "BL_COMPARISON",
+    "status": "NEEDS_REVIEW",
+    "has_defect": false,
+    "defect_fields": [],
+    "review_reason": "wrong_doc_type",
+    "subgroup": "wrong_doc_type",
+    "po_number": "PO 26501",
+    "carrier_bl_ref": "INVALID_DOC",
+    "customer": "Apex Global Logistics",
+    "subject": "Commercial Documents - Packing List Attached",
+    "exception_badge": "WRONG_DOC_TYPE",
+    "missing_items": [
+      {"label": "Document Classification", "detail": "Non-SI/BL document received (Packing List / Certificate detected instead of BL)"}
+    ],
+    "processed_at": "2026-09-19T12:15:00Z",
+    "field_results": [],
+    "timeline": [
+      {"time": "12:15", "stage": "Email received"},
+      {"time": "12:15", "stage": "Classified as BL_COMPARISON"},
+      {"time": "12:16", "stage": "Attachment classified as Packing List (Wrong Doc Type)"},
+      {"time": "12:16", "stage": "Sent for human review — wrong_doc_type"}
+    ]
+  },
+
+  "email_511": {
+    "category": "BL_COMPARISON",
+    "status": "NEEDS_REVIEW",
+    "has_defect": false,
+    "defect_fields": [],
+    "review_reason": "unreadable",
+    "subgroup": "unreadable",
+    "po_number": "PO 26511",
+    "carrier_bl_ref": "UNREADABLE_OCR",
+    "customer": "Trans-Pacific Cargo",
+    "subject": "Draft Transmittal Fax Scan",
+    "exception_badge": "UNREADABLE",
+    "missing_items": [
+      {"label": "OCR Ingestion", "detail": "Attachment is a low-resolution scan; text corrupted or below readability threshold"}
+    ],
+    "processed_at": "2026-09-19T12:30:00Z",
+    "field_results": [],
+    "timeline": [
+      {"time": "12:30", "stage": "Email received"},
+      {"time": "12:30", "stage": "Classified as BL_COMPARISON"},
+      {"time": "12:31", "stage": "OCR engine flagged unreadable document (blurry scan)"},
+      {"time": "12:31", "stage": "Sent for human review — unreadable"}
+    ]
+  },
+
+  "email_005": {
+    "category": "SPAM",
+    "status": null,
+    "has_defect": false,
+    "defect_fields": [],
+    "review_reason": null,
+    "po_number": "N/A",
+    "customer": "Unknown",
+    "subject": "You've won a free cruise!!!",
+    "diverted_reason": "Spam Filtered (noreply@viewer)",
+    "processed_at": "2026-09-19T12:45:00Z",
+    "field_results": [],
+    "timeline": [
+      {"time": "12:45", "stage": "Email received"},
+      {"time": "12:45", "stage": "Classified as SPAM (Score 0.998) — Auto-quarantined"}
+    ]
+  },
+
+  "email_006": {
+    "category": "SI_REQUEST",
+    "status": null,
+    "has_defect": false,
+    "defect_fields": [],
+    "review_reason": null,
+    "po_number": "BL12345",
+    "customer": "Delta Shipping Lines",
+    "subject": "SI NEEDED - BL12345 - DIRECT",
+    "diverted_reason": "SI Template Dispatched (pacific-logistics)",
+    "processed_at": "2026-09-19T13:10:00Z",
+    "field_results": [],
+    "timeline": [
+      {"time": "13:10", "stage": "Email received"},
+      {"time": "13:10", "stage": "Classified as SI_REQUEST — Auto-dispatched blank SI form"}
+    ]
+  },
+
+  "email_007": {
+    "category": "INVOICE_QUERY",
+    "status": null,
+    "has_defect": false,
+    "defect_fields": [],
+    "review_reason": null,
+    "po_number": "INV-8910",
+    "customer": "Pinnacle Traders",
+    "subject": "LOCAL CHARGES - MISSING GR",
+    "diverted_reason": "Demurrage Escalation Queue",
+    "processed_at": "2026-09-19T14:20:00Z",
+    "field_results": [],
+    "timeline": [
+      {"time": "14:20", "stage": "Email received"},
+      {"time": "14:20", "stage": "Classified as INVOICE_QUERY — Forwarded to Accounts Desk"}
+    ]
+  },
+
+  "email_008": {
+    "category": "GENERAL",
+    "status": null,
+    "has_defect": false,
+    "defect_fields": [],
+    "review_reason": null,
+    "po_number": "N/A",
+    "customer": "Port Authority Klang",
+    "subject": "Berthing Report - Weekly Update",
+    "processed_at": "2026-09-19T15:00:00Z",
+    "field_results": [],
+    "timeline": [
+      {"time": "15:00", "stage": "Email received"},
+      {"time": "15:00", "stage": "Classified as GENERAL — Archived to Weekly Ops Folder"}
+    ]
+  },
+
+  "_analytics_snapshot": {
+    "date": "2026-09-21",
+    "total_emails": 520,
+    "stress_bls": 129,
+    "cleared_bls": 82,
+    "general_count": 391,
+    "clearance_rate": "63.6%",
+    "mismatch_rate": "20.9%",
+    "mismatches_count": 27,
+    "critical_mismatches": 27,
+    "avg_triage_latency": "38.4s",
+    "demurrage_avoided": "Example projected savings (illustrative)",
+    "by_category": {
+      "BL_COMPARISON": 129,
+      "SI_REQUEST": 230,
+      "INVOICE_QUERY": 96,
+      "GENERAL": 25,
+      "SPAM": 40
+    },
+    "document_checks": {
+      "OK": 473,
+      "MISMATCH": 27,
+      "NEEDS_REVIEW": 20
+    },
+    "avg_processing_time_seconds": 42,
+    "score_history": [
+      {"version": "v1.0", "date": "2026-09-19T09:00:00Z", "score": 0.61},
+      {"version": "v2.3", "date": "2026-09-19T14:00:00Z", "score": 0.74},
+      {"version": "Production", "date": "2026-09-20T09:00:00Z", "score": 0.9106}
+    ],
+    "benchmark_metrics": {
+      "stage1_accuracy": 0.758,
+      "stage1_macro_f1": 0.782,
+      "stage3_defect_recall": 0.978,
+      "stage3_defect_precision": 1.000,
+      "stage3_defect_f1": 0.989,
+      "stage3_field_f1": 0.986,
+      "end_to_end_rate": 0.957,
+      "end_to_end_success": 44,
+      "end_to_end_total": 46,
+      "final_score": 0.9106,
+      "weights": {"stage1": 0.3, "stage3": 0.2, "end_to_end": 0.5}
+    }
+  }
+}

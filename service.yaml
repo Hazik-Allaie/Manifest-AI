@@ -1,0 +1,52 @@
+apiVersion: serving.knative.dev/v1
+kind: Service
+metadata:
+  name: manifest-ai
+  namespace: manifest-ai-509207
+  labels:
+    cloud.googleapis.com/location: asia-southeast1
+  annotations:
+    run.googleapis.com/ingress: all
+spec:
+  template:
+    metadata:
+      annotations:
+        autoscaling.knative.dev/minScale: "0"
+        autoscaling.knative.dev/maxScale: "10"
+        run.googleapis.com/cpu-throttling: "true"
+    spec:
+      containerConcurrency: 80
+      timeoutSeconds: 300
+      containers:
+      - image: gcr.io/manifest-ai-509207/manifest-ai:latest
+        ports:
+        - name: http1
+          containerPort: 8080
+        resources:
+          limits:
+            cpu: 2000m
+            memory: 2Gi
+        env:
+        - name: MANIFEST_GCP_PROJECT_ID
+          value: manifest-ai-509207
+        - name: MANIFEST_GCP_REGION
+          value: asia-southeast1
+        - name: MANIFEST_VERTEX_MODEL
+          value: gemini-2.5-flash
+        - name: MANIFEST_FIRESTORE_DB
+          value: (default)
+        - name: MANIFEST_PUBSUB_TOPIC
+          value: new-email-events
+        startupProbe:
+          httpGet:
+            path: /health
+            port: 8080
+          initialDelaySeconds: 5
+          periodSeconds: 10
+          failureThreshold: 3
+        livenessProbe:
+          httpGet:
+            path: /health
+            port: 8080
+          periodSeconds: 30
+          timeoutSeconds: 5

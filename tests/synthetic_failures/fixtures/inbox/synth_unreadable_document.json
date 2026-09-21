@@ -1,0 +1,10 @@
+{
+  "email_id": "synth_unreadable_document",
+  "subject": "Transmission Error Corrupt File \u2014 SI-SYNTH-2026-07",
+  "sender": "operations@pacific-logistics.com",
+  "body": "Forwarding documents received from agent. Note BL file transfer might be corrupted.",
+  "attachments": [
+    "attachments/email_synth_unreadable_document_SI.txt",
+    "attachments/email_synth_unreadable_document_BL.txt"
+  ]
+}

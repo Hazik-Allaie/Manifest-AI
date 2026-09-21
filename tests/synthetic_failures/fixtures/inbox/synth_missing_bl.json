@@ -1,0 +1,9 @@
+{
+  "email_id": "synth_missing_bl",
+  "subject": "Missing Draft BL: Pending Documentation \u2014 SI-SYNTH-2026-06",
+  "sender": "operations@pacific-logistics.com",
+  "body": "Please find attached our Shipping Instruction. The carrier draft BL has not been received yet.",
+  "attachments": [
+    "attachments/email_synth_missing_bl_SI.txt"
+  ]
+}

@@ -1,0 +1,33 @@
+# Git & Version Control
+.git/
+.gitignore
+.gitattributes
+
+# Python artifacts
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+.pytest_cache/
+.coverage
+htmlcov/
+
+# Virtual environments
+.venv/
+venv/
+env/
+
+# IDE & OS files
+.idea/
+.vscode/
+.DS_Store
+Thumbs.db
+*.swp
+
+# Agent workspace artifacts
+.agents/
+.gemini/
+*.log
+
+# Large local test caches & raw source files
+tests/synthetic_failures/fixtures/

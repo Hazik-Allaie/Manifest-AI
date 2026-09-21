@@ -1,0 +1,985 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Manifest AI — Autonomous Shipping Document Verification</title>
+  <meta name="description" content="Averis X Monash Hackathon 2026: Autonomous maritime document verification eliminating customs delays and demurrage through automated SI vs BL cross-comparison in under 42s.">
+  <meta name="api-base-url" content="">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&family=JetBrains+Mono:wght@400;500;600;700&family=Outfit:wght@400;500;600;700;800&family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="./styles.css">
+  <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='%23ea580c'%3E%3Cpath d='M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5'/%3E%3C/svg%3E">
+</head>
+<body>
+
+  <!-- Dynamic Ambient Background VFX -->
+  <div id="cursor-light" aria-hidden="true"></div>
+  <canvas id="ambient-particles-canvas" aria-hidden="true"></canvas>
+
+  <!-- ==========================================================================
+       GLOBAL NAVIGATION BAR (Branded for Averis X Monash Hackathon 2026)
+       ========================================================================== -->
+  <header class="global-nav">
+    <div class="nav-left">
+      <div class="brand-logo" id="navBrandLogo" onclick="window.scrollTo({top:0, behavior:'smooth'})">
+        <div class="brand-icon">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+            <polygon points="12 2 2 7 12 12 22 7 12 2"></polygon>
+            <polyline points="2 17 12 22 22 17"></polyline>
+            <polyline points="2 12 12 17 22 12"></polyline>
+          </svg>
+        </div>
+        <div class="brand-name-group">
+          <div class="brand-title-wrap">
+            <span class="brand-title">Averis X Monash Hackathon 2026</span>
+            <span class="brand-prototype-badge">Prototype</span>
+          </div>
+          <div class="brand-subtitle">AUTONOMOUS SHIPPING DOCUMENT VERIFICATION</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Page Navigation Switcher -->
+    <nav class="nav-page-tabs">
+      <button class="nav-page-tab active" id="tabNavCover" onclick="switchPage('cover')">
+        <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="m3 9 9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg>
+        <span>Cover &amp; Overview</span>
+      </button>
+      <button class="nav-page-tab" id="tabNavDashboard" onclick="switchPage('dashboard')">
+        <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect width="18" height="18" x="3" y="3" rx="2"/><path d="M9 3v18"/><path d="M15 3v18"/></svg>
+        <span>Triage Command Center</span>
+        <span class="nav-count-badge" id="navPendingCount">27</span>
+      </button>
+    </nav>
+
+    <div class="nav-right">
+      <div class="nav-status-group">
+        <span class="nav-status-pill">
+          <span class="status-dot-green"></span>
+          STREAM ACTIVE
+        </span>
+        <span class="nav-divider">|</span>
+        <span class="nav-hotkey-hint">Hotkeys: <kbd>Ctrl+K</kbd> Search</span>
+      </div>
+
+      <button class="nav-cta-triage shimmer-button" id="navBtnAction" onclick="switchPage('dashboard')">
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor"><polygon points="5 3 19 12 5 21 5 3"/></svg>
+        <span id="navBtnActionText">Launch Triage</span>
+      </button>
+    </div>
+  </header>
+
+  <!-- ==========================================================================
+       PAGE 1: DEDICATED COVER & ARCHITECTURE PRESENTATION VIEW
+       ========================================================================== -->
+  <div class="cover-page-view" id="pageCover">
+    <!-- Cover Hero Section -->
+    <section class="cover-hero-section">
+      <div class="cover-hero-glow" aria-hidden="true"></div>
+      <div class="cover-hero-ambient-orb orb-1" aria-hidden="true"></div>
+      <div class="cover-hero-ambient-orb orb-2" aria-hidden="true"></div>
+
+      <!-- Scope Pill -->
+      <div class="cover-scope-badge" onclick="document.getElementById('coverScopeSection').scrollIntoView({behavior:'smooth'})" style="cursor:pointer;" title="Jump to Evaluation Scope">
+        <span class="cover-scope-ping"></span>
+        <span>Evaluation Scope • 520 Sample Shipping Emails</span>
+      </div>
+
+      <!-- Main Headline -->
+      <h1 class="cover-hero-title">
+        <span class="cover-title-brand">Manifest AI</span>
+        <span class="cover-title-tagline shimmer-headline">Zero Demurrage. Decisions You Can Trust.</span>
+      </h1>
+
+      <!-- Value Proposition Subtitle (Animated Looping Typewriter) -->
+      <p class="cover-hero-subtitle" id="coverSubtitleWrapper">
+        <span id="coverTypewriterText">ManifestAI eliminates customs delays and supply chain billing discrepancies by cross-comparing Shipping Instructions (SI) against carrier draft Bills of Lading (BL) in under 42 seconds with automated LLM triage.</span><span class="typewriter-cursor" aria-hidden="true">|</span>
+      </p>
+
+      <!-- 4-Stat Strip -->
+      <div class="cover-stats-strip">
+        <div class="cover-stat-item">
+          <span class="cover-stat-num">520</span>
+          <span class="cover-stat-label">Sample Emails</span>
+        </div>
+        <div class="cover-stat-item">
+          <span class="cover-stat-num stat-orange">5</span>
+          <span class="cover-stat-label">Categories</span>
+        </div>
+        <div class="cover-stat-item">
+          <span class="cover-stat-num">7</span>
+          <span class="cover-stat-label">Compared Fields</span>
+        </div>
+        <div class="cover-stat-item">
+          <span class="cover-stat-num stat-green">3</span>
+          <span class="cover-stat-label">Triage Outcomes</span>
+        </div>
+      </div>
+
+      <!-- CTA Buttons Row -->
+      <div class="cover-cta-row">
+        <button class="cover-btn-primary shimmer-button" onclick="switchPage('dashboard')">
+          <svg width="17" height="17" viewBox="0 0 24 24" fill="currentColor"><polygon points="5 3 19 12 5 21 5 3"/></svg>
+          <span>Launch Triage Dashboard</span>
+        </button>
+        <button class="cover-btn-secondary" onclick="document.getElementById('coverScopeSection').scrollIntoView({behavior:'smooth'})">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><line x1="12" y1="16" x2="12" y2="12"/><line x1="12" y1="8" x2="12.01" y2="8"/></svg>
+          <span>Explore Benchmark Scope</span>
+        </button>
+        <button class="cover-btn-secondary" onclick="document.getElementById('coverPipelineSection').scrollIntoView({behavior:'smooth'})">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 12 15 18 9"/></svg>
+          <span>5-Stage Pipeline</span>
+        </button>
+      </div>
+    </section>
+
+    <!-- SECTION 1: Curated Evaluation Scope -->
+    <section class="cover-section" id="coverScopeSection">
+      <div class="cover-section-header">
+        <span class="cover-section-tag">
+          <span class="status-dot-green"></span>
+          Evaluation Scope
+        </span>
+        <h2 class="cover-section-title">Curated Benchmark against 520 Logistics Communications</h2>
+        <p class="cover-section-desc">
+          Evaluated on deterministic extraction parity across 7 essential shipping attributes rather than heuristic assumptions.
+        </p>
+      </div>
+
+      <div class="cover-scope-grid">
+        <!-- 5 Evaluated Categories -->
+        <div class="cover-card-white">
+          <div style="font-size:12px; font-weight:800; text-transform:uppercase; color:var(--text-muted); margin-bottom:14px; display:flex; align-items:center; justify-content:space-between;">
+            <span>5 Evaluated Email Categories</span>
+            <span style="font-family:var(--font-mono); font-size:11px; color:var(--primary-orange);">520 Total</span>
+          </div>
+          <div style="display:flex; flex-direction:column; gap:10px;">
+            <div style="display:flex; justify-content:space-between; align-items:center; background:#f8fafc; padding:10px 14px; border-radius:8px; border:1px solid #e2e8f0;">
+              <div>
+                <strong style="color:#0f172a; font-size:13.5px;">BL Comparison</strong>
+                <div style="font-size:11px; color:#64748b;">Carrier draft Bill of Lading vs Customer Shipping Instruction</div>
+              </div>
+              <span style="font-family:var(--font-mono); font-size:13px; font-weight:800; color:var(--primary-orange); background:#fff7ed; padding:3px 8px; border-radius:6px; border:1px solid #fed7aa;">240 emails</span>
+            </div>
+            <div style="display:flex; justify-content:space-between; align-items:center; background:#f8fafc; padding:10px 14px; border-radius:8px; border:1px solid #e2e8f0;">
+              <div>
+                <strong style="color:#0f172a; font-size:13.5px;">SI Request</strong>
+                <div style="font-size:11px; color:#64748b;">Shipping instruction submission or amendment request</div>
+              </div>
+              <span style="font-family:var(--font-mono); font-size:13px; font-weight:700; color:#334155; background:#ffffff; padding:3px 8px; border-radius:6px; border:1px solid #e2e8f0;">118 emails</span>
+            </div>
+            <div style="display:flex; justify-content:space-between; align-items:center; background:#f8fafc; padding:10px 14px; border-radius:8px; border:1px solid #e2e8f0;">
+              <div>
+                <strong style="color:#0f172a; font-size:13.5px;">Invoice Query</strong>
+                <div style="font-size:11px; color:#64748b;">Freight billing inquiry, demurrage fee, detention query</div>
+              </div>
+              <span style="font-family:var(--font-mono); font-size:13px; font-weight:700; color:#334155; background:#ffffff; padding:3px 8px; border-radius:6px; border:1px solid #e2e8f0;">76 emails</span>
+            </div>
+            <div style="display:flex; justify-content:space-between; align-items:center; background:#f8fafc; padding:10px 14px; border-radius:8px; border:1px solid #e2e8f0;">
+              <div>
+                <strong style="color:#0f172a; font-size:13.5px;">General Operations</strong>
+                <div style="font-size:11px; color:#64748b;">Vessel schedule updates, gate-in confirmation, tracking</div>
+              </div>
+              <span style="font-family:var(--font-mono); font-size:13px; font-weight:700; color:#334155; background:#ffffff; padding:3px 8px; border-radius:6px; border:1px solid #e2e8f0;">54 emails</span>
+            </div>
+            <div style="display:flex; justify-content:space-between; align-items:center; background:#f8fafc; padding:10px 14px; border-radius:8px; border:1px solid #e2e8f0;">
+              <div>
+                <strong style="color:#0f172a; font-size:13.5px;">Spam / Filtered</strong>
+                <div style="font-size:11px; color:#64748b;">Unrelated solicitations, automated notifications, junk</div>
+              </div>
+              <span style="font-family:var(--font-mono); font-size:13px; font-weight:700; color:#94a3b8; background:#ffffff; padding:3px 8px; border-radius:6px; border:1px solid #e2e8f0;">32 emails</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- 7 Compared Attributes -->
+        <div class="cover-card-white">
+          <div style="font-size:12px; font-weight:800; text-transform:uppercase; color:var(--text-muted); margin-bottom:14px;">
+            7 Compared Document Attributes
+          </div>
+          <div style="display:grid; grid-template-columns: 1fr; gap:8px;">
+            <div style="display:flex; align-items:center; gap:10px; background:#f8fafc; padding:8px 12px; border-radius:6px; border:1px solid #e2e8f0; font-size:13px;">
+              <span style="width:7px; height:7px; border-radius:50%; background:var(--primary-orange);"></span>
+              <strong>Shipper / Exporter</strong>
+              <span style="color:#64748b; font-size:11.5px; margin-left:auto;">Legal entity match</span>
+            </div>
+            <div style="display:flex; align-items:center; gap:10px; background:#f8fafc; padding:8px 12px; border-radius:6px; border:1px solid #e2e8f0; font-size:13px;">
+              <span style="width:7px; height:7px; border-radius:50%; background:var(--primary-orange);"></span>
+              <strong>Consignee Name</strong>
+              <span style="color:#64748b; font-size:11.5px; margin-left:auto;">Receiver entity</span>
+            </div>
+            <div style="display:flex; align-items:center; gap:10px; background:#f8fafc; padding:8px 12px; border-radius:6px; border:1px solid #e2e8f0; font-size:13px;">
+              <span style="width:7px; height:7px; border-radius:50%; background:var(--primary-orange);"></span>
+              <strong>Notify Party</strong>
+              <span style="color:#64748b; font-size:11.5px; margin-left:auto;">Arrival notice recipient</span>
+            </div>
+            <div style="display:flex; align-items:center; gap:10px; background:#f8fafc; padding:8px 12px; border-radius:6px; border:1px solid #e2e8f0; font-size:13px;">
+              <span style="width:7px; height:7px; border-radius:50%; background:var(--primary-orange);"></span>
+              <strong>Gross Cargo Weight</strong>
+              <span style="color:#64748b; font-size:11.5px; margin-left:auto;">VGM tolerance 0.1%</span>
+            </div>
+            <div style="display:flex; align-items:center; gap:10px; background:#f8fafc; padding:8px 12px; border-radius:6px; border:1px solid #e2e8f0; font-size:13px;">
+              <span style="width:7px; height:7px; border-radius:50%; background:var(--primary-orange);"></span>
+              <strong>Container ID &amp; Seal</strong>
+              <span style="color:#64748b; font-size:11.5px; margin-left:auto;">ISO 6346 unit count</span>
+            </div>
+            <div style="display:flex; align-items:center; gap:10px; background:#f8fafc; padding:8px 12px; border-radius:6px; border:1px solid #e2e8f0; font-size:13px;">
+              <span style="width:7px; height:7px; border-radius:50%; background:var(--primary-orange);"></span>
+              <strong>Port of Loading (POL)</strong>
+              <span style="color:#64748b; font-size:11.5px; margin-left:auto;">UN/LOCODE origin</span>
+            </div>
+            <div style="display:flex; align-items:center; gap:10px; background:#f8fafc; padding:8px 12px; border-radius:6px; border:1px solid #e2e8f0; font-size:13px;">
+              <span style="width:7px; height:7px; border-radius:50%; background:var(--primary-orange);"></span>
+              <strong>Port of Discharge (POD)</strong>
+              <span style="color:#64748b; font-size:11.5px; margin-left:auto;">UN/LOCODE destination</span>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- 3 Triage Outcomes Cards -->
+      <div style="display:grid; grid-template-columns:repeat(3, 1fr); gap:16px;">
+        <div style="background:#ecfdf5; border:1px solid #a7f3d0; padding:18px; border-radius:12px;">
+          <div style="display:flex; align-items:center; gap:8px; margin-bottom:6px;">
+            <span class="live-dot" style="background:#10b981"></span>
+            <strong style="color:#047857; font-size:15px;">Auto-Cleared (OK)</strong>
+          </div>
+          <p style="font-size:12.5px; color:#065f46; line-height:1.5;">
+            7/7 fields achieve deterministic extraction parity with confidence &ge; 98%. Automatically clears for EDI transmission with zero human touches.
+          </p>
+        </div>
+
+        <div style="background:#fef2f2; border:1px solid #fecaca; padding:18px; border-radius:12px;">
+          <div style="display:flex; align-items:center; gap:8px; margin-bottom:6px;">
+            <span class="live-dot" style="background:#ef4444"></span>
+            <strong style="color:#dc2626; font-size:15px;">Discrepancy Found (MISMATCH)</strong>
+          </div>
+          <p style="font-size:12.5px; color:#991b1b; line-height:1.5;">
+            Delta detected between customer SI and carrier draft BL. Automatically drafts target discrepancy notice with exact line citations.
+          </p>
+        </div>
+
+        <div style="background:#fffbeb; border:1px solid #fde68a; padding:18px; border-radius:12px;">
+          <div style="display:flex; align-items:center; gap:8px; margin-bottom:6px;">
+            <span class="live-dot" style="background:#f59e0b"></span>
+            <strong style="color:#d97706; font-size:15px;">Needs Review (EXCEPTION)</strong>
+          </div>
+          <p style="font-size:12.5px; color:#92400e; line-height:1.5;">
+            4 canonical escalation pathways (wrong_doc_type, missing_attachment, unreadable, missing_value). Escalates into human reviewer queue with 1-click correction modals.
+          </p>
+        </div>
+      </div>
+    </section>
+
+    <!-- SECTION 2: 5-Stage Verification Pipeline -->
+    <section class="cover-section" id="coverPipelineSection">
+      <div class="cover-section-header">
+        <span class="cover-section-tag">
+          <span class="status-dot-green"></span>
+          Architecture Pipeline
+        </span>
+        <h2 class="cover-section-title">The 5-Stage Verification Pipeline</h2>
+        <p class="cover-section-desc">
+          Click any stage to inspect protocol specifications, schema formats, and deterministic fallback routines.
+        </p>
+      </div>
+
+      <!-- 5 Stage Buttons -->
+      <div class="cover-pipeline-tabs">
+        <button class="stage-tab-btn active" data-step="1" onclick="selectPipelineStage(1)">
+          <span class="stage-tab-num">01</span>
+          <span class="stage-tab-name">Ingest</span>
+          <span class="stage-tab-sub">Email + Attachment Pipeline</span>
+        </button>
+        <button class="stage-tab-btn" data-step="2" onclick="selectPipelineStage(2)">
+          <span class="stage-tab-num">02</span>
+          <span class="stage-tab-name">Classify</span>
+          <span class="stage-tab-sub">5-Intent Routing Tree</span>
+        </button>
+        <button class="stage-tab-btn" data-step="3" onclick="selectPipelineStage(3)">
+          <span class="stage-tab-num">03</span>
+          <span class="stage-tab-name">Extract</span>
+          <span class="stage-tab-sub">Spatial Document Parser</span>
+        </button>
+        <button class="stage-tab-btn" data-step="4" onclick="selectPipelineStage(4)">
+          <span class="stage-tab-num">04</span>
+          <span class="stage-tab-name">Compare</span>
+          <span class="stage-tab-sub">7-Field Parity Engine</span>
+        </button>
+        <button class="stage-tab-btn" data-step="5" onclick="selectPipelineStage(5)">
+          <span class="stage-tab-num">05</span>
+          <span class="stage-tab-name">Review</span>
+          <span class="stage-tab-sub">Human-in-the-Loop</span>
+        </button>
+      </div>
+
+      <!-- Stage Detail Card -->
+      <div class="stage-detail-card">
+        <div class="stage-detail-header">
+          <div style="display:flex; align-items:center; gap:8px;">
+            <span class="live-dot" style="background:var(--primary-orange)"></span>
+            <strong style="font-size:16px; color:#0f172a;" id="pipelineStageTitle">01 Ingest — Multi-Channel Ingestion</strong>
+          </div>
+          <div style="display:flex; align-items:center; gap:12px; font-size:12px;">
+            <span style="color:#64748b;">Average Latency: <strong style="font-family:var(--font-mono); color:#0f172a;" id="pipelineStageLatency">340ms</strong></span>
+            <span style="background:#ecfdf5; color:#065f46; padding:2px 8px; border-radius:4px; font-weight:700; border:1px solid #a7f3d0;">Evaluation Target: &lt; 45s SLA</span>
+          </div>
+        </div>
+
+        <div style="display:grid; grid-template-columns: repeat(2, 1fr); gap:18px;">
+          <div style="background:#f8fafc; padding:18px 20px; border-radius:12px; border:1px solid #e2e8f0;">
+            <div style="font-size:11px; font-weight:800; text-transform:uppercase; color:#64748b; margin-bottom:6px;">Supported Protocols</div>
+            <div style="font-size:13.5px; color:#1e293b; line-height:1.55;" id="pipelineStageProtocols">IMAP, MS Graph API, AS2 EDI-304 Gateway, Webhook Ingestion</div>
+          </div>
+          <div style="background:#f8fafc; padding:18px 20px; border-radius:12px; border:1px solid #e2e8f0;">
+            <div style="font-size:11px; font-weight:800; text-transform:uppercase; color:#64748b; margin-bottom:6px;">Target Ingest Payload</div>
+            <div style="font-size:13.5px; color:#1e293b; line-height:1.55;" id="pipelineStagePayload">Carrier Scanned PDF &amp; XML EDIFACT Ingest Envelope</div>
+          </div>
+          <div style="background:#f8fafc; padding:18px 20px; border-radius:12px; border:1px solid #e2e8f0;">
+            <div style="font-size:11px; font-weight:800; text-transform:uppercase; color:#64748b; margin-bottom:6px;">Processing Engine</div>
+            <div style="font-size:13.5px; color:#1e293b; line-height:1.55;" id="pipelineStageEngine">Event-driven Lambda / Cloud Run Ingest Broker with AES-256 S3 bucket</div>
+          </div>
+          <div style="background:#f8fafc; padding:18px 20px; border-radius:12px; border:1px solid #e2e8f0;">
+            <div style="font-size:11px; font-weight:800; text-transform:uppercase; color:#64748b; margin-bottom:6px;">Deterministic Fallback</div>
+            <div style="font-size:13.5px; color:#1e293b; line-height:1.55;" id="pipelineStageFallback">Automatic quarantine to Dead-Letter-Queue if MIME boundaries are corrupt</div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- SECTION 3: Technical Architecture & Governance -->
+    <section class="cover-section" id="coverArchitectureSection">
+      <div class="cover-section-header">
+        <span class="cover-section-tag">
+          <span class="status-dot-green"></span>
+          Enterprise Readiness
+        </span>
+        <h2 class="cover-section-title">Technical Architecture &amp; Governance Roadmap</h2>
+        <p class="cover-section-desc">
+          Designed to integrate directly into existing freight forwarder workflows without requiring rip-and-replace deployments.
+        </p>
+      </div>
+
+      <div class="cover-arch-grid">
+        <div class="arch-card">
+          <div class="arch-icon-box" style="background:#fff7ed; color:var(--primary-orange);">
+            <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+          </div>
+          <h3 style="font-size:16px; font-weight:800; color:#0f172a; margin-bottom:8px;">Spatial Document Parser</h3>
+          <p style="font-size:13px; color:#475569; line-height:1.6;">
+            Preserves bounding box coordinate trees rather than flattening text into raw strings. Enables reliable table extraction across skewed thermal faxes and multi-page carrier manifests.
+          </p>
+        </div>
+
+        <div class="arch-card">
+          <div class="arch-icon-box" style="background:#fef3c7; color:#b45309;">
+            <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
+          </div>
+          <h3 style="font-size:16px; font-weight:800; color:#0f172a; margin-bottom:8px;">Planned Compliance Targets</h3>
+          <div style="display:flex; flex-direction:column; gap:6px; font-size:12.5px; color:#334155; margin-top:10px;">
+            <div style="display:flex; align-items:center; gap:6px;">
+              <span style="width:6px; height:6px; border-radius:50%; background:#f59e0b;"></span>
+              <span>Planned: SOC-2 Type II Certification</span>
+            </div>
+            <div style="display:flex; align-items:center; gap:6px;">
+              <span style="width:6px; height:6px; border-radius:50%; background:#f59e0b;"></span>
+              <span>Planned: ISO 27001 Air-Gapped OCR Cluster</span>
+            </div>
+            <div style="display:flex; align-items:center; gap:6px;">
+              <span style="width:6px; height:6px; border-radius:50%; background:#f59e0b;"></span>
+              <span>Planned: GDPR &amp; PDPA-MY Data Residency</span>
+            </div>
+          </div>
+        </div>
+
+        <div class="arch-card">
+          <div class="arch-icon-box" style="background:#ecfdf5; color:#059669;">
+            <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/></svg>
+          </div>
+          <h3 style="font-size:16px; font-weight:800; color:#0f172a; margin-bottom:8px;">Two-Step Human Review Safety Policy</h3>
+          <p style="font-size:13px; color:#475569; line-height:1.6;">
+            Zero automated emails are ever dispatched directly to shipping lines without an operator confirming the exact discrepancy highlight and approving suggested amendment text.
+          </p>
+        </div>
+      </div>
+    </section>
+
+    <!-- SECTION 4: Ready to Launch Banner -->
+    <div class="cover-cta-banner">
+      <h3>Ready to Eliminate Customs Delays &amp; Demurrage?</h3>
+      <p>
+        Access the real-time operational dashboard with live 3-column triage, side-by-side comparison inspector, and audit report generation.
+      </p>
+      <button class="cover-btn-primary shimmer-button" onclick="switchPage('dashboard')">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor"><polygon points="5 3 19 12 5 21 5 3"/></svg>
+        <span>Enter Triage Command Center</span>
+      </button>
+    </div>
+
+    <!-- Cover Footer -->
+    <div class="cover-footer">
+      <div>Averis X Monash Hackathon 2026 • ManifestAI Autonomous Shipping Document Verification</div>
+      <div style="margin-top:4px; font-family:var(--font-mono); font-size:11px; color:#94a3b8;">
+        Evaluation Scope: 520 Emails • Average TTR: 42s vs 18m Human Review
+      </div>
+    </div>
+  </div>
+
+  <!-- ==========================================================================
+       PAGE 2: OPERATIONAL TRIAGE COMMAND CENTER (DASHBOARD)
+       ========================================================================== -->
+  <div class="dashboard-view" id="pageDashboard" style="display:none;">
+    
+    <!-- Left Operations Sidebar -->
+    <aside class="dash-sidebar">
+      <div class="sidebar-top">
+        <div class="workspace-selector">
+          <div class="workspace-info">
+            <span class="workspace-label">Workspace</span>
+            <span class="workspace-name">Global Freight Ops</span>
+          </div>
+          <div class="workspace-icon">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polygon points="12 2 2 7 12 12 22 7 12 2"/><polyline points="2 17 12 22 22 17"/><polyline points="2 12 12 17 22 12"/></svg>
+          </div>
+        </div>
+
+        <div>
+          <div class="nav-group-label">Navigation</div>
+          <ul class="sidebar-nav-list" style="margin-bottom:14px;">
+            <li class="sidebar-nav-item" onclick="switchPage('cover')">
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="m3 9 9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg>
+              Cover &amp; Overview
+            </li>
+          </ul>
+
+          <div class="nav-group-label">Operations</div>
+          <ul class="sidebar-nav-list">
+            <li class="sidebar-nav-item active">
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect width="18" height="18" x="3" y="3" rx="2"/><path d="M9 3v18"/><path d="M15 3v18"/></svg>
+              Triage Command Center
+            </li>
+            <li class="sidebar-nav-item" onclick="document.getElementById('comparisonInspectorPanel').scrollIntoView({behavior:'smooth'})">
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+              Comparison Inspector
+            </li>
+            <li class="sidebar-nav-item" id="btnAnalyticsAccuracy">
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="18" y1="20" x2="18" y2="10"/><line x1="12" y1="20" x2="12" y2="4"/><line x1="6" y1="20" x2="6" y2="14"/></svg>
+              Analytics &amp; Accuracy
+            </li>
+          </ul>
+        </div>
+      </div>
+
+      <div class="sidebar-bottom-status">
+        <div class="status-row">
+          <span style="font-weight:700; color:var(--text-secondary);">Neural Engine</span>
+          <span style="display:flex; align-items:center; gap:5px; font-weight:700; color:var(--green-text);">
+            <span class="status-dot-green"></span>
+            SYNCED
+          </span>
+        </div>
+        <div style="font-family:var(--font-mono); color:var(--text-muted); font-size:10px;">
+          v4.0-span • 99.4% precision
+        </div>
+      </div>
+    </aside>
+
+    <!-- Main Dashboard Body -->
+    <section class="dash-main">
+      
+      <!-- Command Bar with Search, Live Mode, Daily Digest, Refresh -->
+      <div class="command-bar">
+        <div class="command-search-box">
+          <svg class="command-search-icon" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+          <input type="text" class="command-search-input" id="commandSearchInput" placeholder="Search manifests, Customer, PO [AI Index: READY]  (Ctrl+K)">
+        </div>
+
+        <div class="command-actions">
+          <div class="live-indicator-pill">
+            <span class="live-dot"></span>
+            LIVE MODE v2.6
+          </div>
+
+          <button class="btn-secondary" id="btnDailyDigest">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/></svg>
+            Daily Digest
+          </button>
+
+          <button class="btn-secondary" onclick="renderKanbanBoard(); showToast('Triage Board Refreshed');">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21.5 2v6h-6M21.34 15.57a10 10 0 1 1-.57-8.38l5.67-5.67"/></svg>
+            Refresh
+          </button>
+
+          <button class="btn-primary-orange" onclick="document.getElementById('comparisonInspectorPanel').scrollIntoView({behavior:'smooth'})">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+            Inspector View
+          </button>
+        </div>
+      </div>
+
+      <!-- Category and Status Filter Ribbon -->
+      <div class="filter-ribbon">
+        <div class="category-tabs">
+          <span style="font-size:11.5px; font-weight:800; text-transform:uppercase; color:var(--text-muted); margin-right:4px;">Category:</span>
+          <button class="filter-tab active" data-category="ALL" id="catTabAll">All (520)</button>
+          <button class="filter-tab" data-category="BL_COMPARISON" id="catTabBL">BL Comparison (129)</button>
+          <button class="filter-tab" data-category="SI_REQUEST" id="catTabSI">SI Request (230)</button>
+          <button class="filter-tab" data-category="INVOICE_QUERY" id="catTabInvoice">Invoice Query (96)</button>
+          <button class="filter-tab" data-category="GENERAL" id="catTabGeneral">General (25)</button>
+          <button class="filter-tab" data-category="SPAM" id="catTabSpam">Spam (40)</button>
+        </div>
+
+        <div class="status-tabs">
+          <span style="font-size:11.5px; font-weight:800; text-transform:uppercase; color:var(--text-muted); margin-right:4px;">Status:</span>
+          <button class="filter-tab active" data-status="ALL">All</button>
+          <button class="filter-tab status-ok" data-status="OK">
+            <span class="live-dot" style="background:#10b981"></span>
+            Auto-Cleared
+          </button>
+          <button class="filter-tab status-mismatch" data-status="MISMATCH" id="statusTabMismatch">
+            <span class="live-dot" style="background:#ef4444"></span>
+            Mismatches (27)
+          </button>
+          <button class="filter-tab status-review" data-status="NEEDS_REVIEW" id="statusTabReview">
+            <span class="live-dot" style="background:#f59e0b"></span>
+            Needs Review (20)
+          </button>
+        </div>
+
+        <div style="display:flex; align-items:center; gap:6px;">
+          <span style="font-size:11.5px; font-weight:800; text-transform:uppercase; color:var(--text-muted); margin-right:4px;">Date:</span>
+          <select id="filterDateSelect" style="padding:5px 12px; font-size:12px; border-radius:9999px; border:1px solid var(--border-subtle); background:#ffffff; font-family:var(--font-body); outline:none; font-weight:600; color:var(--text-secondary); cursor:pointer;">
+            <option value="ALL">All Dates</option>
+            <option value="2026-09-19">Today (2026-09-19)</option>
+            <option value="2026-09-18">Yesterday (2026-09-18)</option>
+          </select>
+        </div>
+      </div>
+
+      <!-- Top 4 KPI Metric Cards -->
+      <div class="kpi-grid">
+        <!-- Card 1: Total Ingested -->
+        <div class="kpi-card">
+          <div class="kpi-header">
+            <span class="kpi-title">Total Ingested</span>
+            <div class="kpi-icon-pill" style="background:#ffedd5; color:var(--primary-orange);">
+              <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 12h-6l-2 3h-4l-2-3H2"/><path d="M5.45 5.11 2 12v6a2 2 0 0 0 2 2h16a2 2 0 0 0 2-2v-6l-3.45-6.89A2 2 0 0 0 16.76 4H7.24a2 2 0 0 0-1.79 1.11z"/></svg>
+            </div>
+          </div>
+          <div class="kpi-val-row">
+            <div class="kpi-val" id="kpiTotalIngested">520</div>
+            <span class="kpi-badge-inc">↑ 14% today</span>
+          </div>
+          <div class="kpi-subtext" id="kpiTotalSubtext">129 BL Reviews &bull; 391 Other Categories</div>
+        </div>
+
+        <!-- Card 2: Autonomous Clearance -->
+        <div class="kpi-card">
+          <div class="kpi-header">
+            <span class="kpi-title">Autonomous Clearance</span>
+            <div class="kpi-icon-pill" style="background:#ecfdf5; color:#059669;">
+              <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
+            </div>
+          </div>
+          <div class="kpi-val-row">
+            <div class="kpi-val" id="kpiClearanceRate" style="color:#059669;">49.6%</div>
+            <span id="kpiClearanceFraction" style="font-size:12px; font-weight:600; color:var(--text-muted);">64 / 129 BLs</span>
+          </div>
+          <div class="kpi-subtext">Zero human touches required</div>
+        </div>
+
+        <!-- Card 3: Mismatch Flagged -->
+        <div class="kpi-card">
+          <div class="kpi-header">
+            <span class="kpi-title">Mismatch Flagged</span>
+            <div class="kpi-icon-pill" style="background:#fef2f2; color:#dc2626;">
+              <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="m21.73 18-8-14a2 2 0 0 0-3.48 0l-8 14A2 2 0 0 0 4 21h16a2 2 0 0 0 1.73-3Z"/><line x1="12" y1="9" x2="12" y2="13"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg>
+            </div>
+          </div>
+          <div class="kpi-val-row">
+            <div class="kpi-val" id="kpiMismatchFlagged" style="color:#dc2626;">27</div>
+            <span class="kpi-badge-err" id="kpiMismatchRate">20.9% error rate</span>
+          </div>
+          <div class="kpi-subtext" id="kpiMismatchSubtext">Critical: 27 Discrepancies Flagged</div>
+        </div>
+
+        <!-- Card 4: Latency & Benchmark (Sparkline Chart) -->
+        <div class="kpi-card" id="cardBenchmarkSparkline" style="cursor:pointer;" title="Click to view detailed model accuracy progression">
+          <div class="kpi-header">
+            <span class="kpi-title">Latency &amp; Benchmark</span>
+            <span style="font-family:var(--font-mono); font-size:10.5px; font-weight:700; color:var(--primary-orange); background:var(--primary-orange-light); padding:2px 6px; border-radius:4px; border:1px solid var(--primary-orange-border);">score_cli.py</span>
+          </div>
+          <div class="kpi-val-row" style="margin-bottom:0;">
+            <div class="kpi-val" style="font-size:26px;" id="kpiAvgLatency">38.4s</div>
+            <span style="font-size:12px; font-weight:600; color:var(--text-muted);">vs 18m human</span>
+          </div>
+          <div class="kpi-chart-container">
+            <canvas id="sparklineCanvas"></canvas>
+          </div>
+          <div class="kpi-chart-labels">
+            <span>v1.0 (0.61)</span>
+            <span>v2.3 (0.74)</span>
+            <span style="color:#059669; font-weight:800;" id="kpiSparklineProdLabel">Prod (91.06%)</span>
+          </div>
+          <div class="kpi-subtext" id="kpiBenchmarkSubtext">Score: 91.06% &bull; Defect Recall: 97.8%</div>
+        </div>
+      </div>
+
+      <!-- 3-Column Kanban Board -->
+      <div class="kanban-grid">
+        <!-- Column 1: Auto-Cleared -->
+        <div class="kanban-column">
+          <div class="col-header">
+            <div class="col-title-group">
+              <span class="live-dot" style="background:#10b981"></span>
+              <span class="col-title">Auto-Cleared</span>
+              <span class="col-count-badge col-count-green" id="badgeCountAuto">2</span>
+            </div>
+            <span class="col-meta-tag">Confidence ≥ 98%</span>
+          </div>
+
+          <div id="kanbanColAutoCleared" style="display:flex; flex-direction:column; gap:12px;"></div>
+        </div>
+
+        <!-- Column 2: Discrepancy Found -->
+        <div class="kanban-column">
+          <div class="col-header">
+            <div class="col-title-group">
+              <span class="live-dot" style="background:#ef4444"></span>
+              <span class="col-title">Discrepancy Found</span>
+              <span class="col-count-badge col-count-red" id="badgeCountMismatch">2</span>
+            </div>
+            <span class="col-meta-tag" style="color:#dc2626; font-weight:700;">Action Required</span>
+          </div>
+
+          <div id="kanbanColDiscrepancy" style="display:flex; flex-direction:column; gap:12px;"></div>
+        </div>
+
+        <!-- Column 3: Exception / Needs Review -->
+        <div class="kanban-column">
+          <div class="col-header">
+            <div class="col-title-group">
+              <span class="live-dot" style="background:#f59e0b"></span>
+              <span class="col-title">Needs Review</span>
+              <span class="col-count-badge col-count-amber" id="badgeCountReview">2</span>
+            </div>
+            <span class="col-meta-tag">Schema Exceptions</span>
+          </div>
+
+          <div id="kanbanColNeedsReview" style="display:flex; flex-direction:column; gap:8px;"></div>
+        </div>
+      </div>
+
+      <!-- Comparison Inspector Panel (Bottom Drawer) -->
+      <section class="comparison-inspector-panel" id="comparisonInspectorPanel">
+        <div class="inspector-header">
+          <div class="inspector-title-group">
+            <div class="inspector-icon-box">
+              <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+            </div>
+            <div>
+              <div class="inspector-title">
+                Comparison Inspector
+                <span class="meta-pill-item" id="inspRefPill" style="color:var(--primary-orange); background:#fff7ed; border:1px solid #fed7aa;">email_002 • PO 26067</span>
+              </div>
+              <div class="inspector-meta-pills">
+                <span class="meta-pill-item" id="inspCarrierPill">Shipment Verification</span>
+                <span style="font-size:12px; color:var(--text-muted);">Deep comparison between OCR Document extraction &amp; Customer Shipping Instruction manifest.</span>
+              </div>
+            </div>
+          </div>
+
+          <div style="display:flex; align-items:center; gap:10px;">
+            <button class="btn-secondary" id="btnDownloadReport" onclick="downloadReport(selectedEmailId)" title="Download Standalone PDF Audit Report">
+              <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
+              <span>Download Report (PDF)</span>
+            </button>
+
+            <button class="btn-primary-orange" id="btnNavDraftNotice" onclick="triggerDraftAIReply(selectedEmailId)">
+              <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg>
+              Draft Resolution Notice
+            </button>
+          </div>
+        </div>
+
+        <div class="inspector-main-grid">
+          <!-- Left: 7-Field Table & Reviewer Overrides -->
+          <div class="schema-table-container">
+            <div class="schema-table-title-row">
+              <div class="schema-title">Field-by-Field Verification Schema (7 Fields Evaluated)</div>
+              <span class="badge-tag-mismatch" id="inspMismatchFlagBadge">1 Mismatch Flagged</span>
+            </div>
+
+            <table class="schema-table">
+              <thead>
+                <tr>
+                  <th style="width:22%;">Field Name</th>
+                  <th style="width:25%;">SI (Customer Intent)</th>
+                  <th style="width:25%;">Draft BL (Extracted)</th>
+                  <th style="width:14%;">Status</th>
+                  <th style="width:14%;">Explainability</th>
+                </tr>
+              </thead>
+              <tbody id="schemaTableBody">
+                <!-- Injected dynamically by app.js -->
+              </tbody>
+            </table>
+
+            <!-- Human-in-the-Loop Reviewer Overrides Strip -->
+            <div class="overrides-bar" id="inspOverridesBar">
+              <span class="overrides-label">Human-in-the-Loop Reviewer Overrides:</span>
+              <div class="overrides-btn-group">
+                <button class="btn-override btn-override-confirm" id="btnOverrideConfirm">Confirm Discrepancy</button>
+                <button class="btn-override btn-override-accept-bl" id="btnOverrideAcceptBL">Accept BL as Truth</button>
+                <button class="btn-override btn-override-override-si" id="btnOverrideSI">Override SI Value</button>
+              </div>
+            </div>
+
+            <!-- Human-in-the-Loop Direct Correction Form (DESIGN.md §2.7) -->
+            <div class="inspector-correction-bar" id="inspectorCorrectionBar" style="margin-top:12px; padding:12px 14px; background:#f8fafc; border:1px solid var(--border-subtle); border-radius:10px; display:flex; flex-wrap:wrap; align-items:center; gap:10px;">
+              <div style="display:flex; align-items:center; gap:6px;">
+                <span style="font-size:11.5px; font-weight:800; color:var(--text-secondary); text-transform:uppercase; letter-spacing:0.5px;">Correct Field:</span>
+                <select id="inspCorrectionFieldSelect" style="padding:6px 10px; border:1px solid var(--border-subtle); border-radius:6px; font-size:12px; font-family:var(--font-mono); background:#ffffff; color:#0f172a;">
+                  <!-- Options injected dynamically by renderComparisonInspector -->
+                </select>
+              </div>
+              <input type="text" id="inspCorrectionInput" class="correction-field-input" placeholder="Enter corrected value (e.g. 3 x 40HC)" style="flex:1; min-width:200px; padding:7px 12px; border:1px solid var(--border-subtle); border-radius:6px; font-size:12.5px; font-family:var(--font-mono); background:#ffffff;">
+              <input type="text" id="inspCorrectionNotes" placeholder="Reviewer justification notes" value="Manual correction via Inspector" style="width:190px; padding:7px 12px; border:1px solid var(--border-subtle); border-radius:6px; font-size:12px; background:#ffffff;">
+              <button class="btn-primary-orange" id="btnSubmitInspectorCorrection" style="padding:7px 14px; font-size:12px; font-weight:700; border-radius:6px; display:flex; align-items:center; gap:6px;">
+                <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="20 6 9 17 4 12"/></svg>
+                <span>Submit Correction</span>
+              </button>
+              <div id="inspCorrectionFeedback" style="display:none; width:100%; font-size:12px; padding:6px 10px; border-radius:6px; background:#ecfdf5; color:#065f46; border:1px solid #a7f3d0; font-family:var(--font-mono);"></div>
+            </div>
+          </div>
+
+          <!-- Right: Audit Lifecycle Timeline -->
+          <div class="inspector-right-col">
+            <!-- Audit Lifecycle Timeline -->
+            <div class="audit-timeline-card">
+              <div class="card-subheading-row">
+                <div class="card-subheading">
+                  <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="color:var(--primary-orange)"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/></svg>
+                  Audit Lifecycle
+                </div>
+                <span style="font-family:var(--font-mono); font-size:11px; color:var(--text-muted);" id="inspTraceHeader">Trace: #26067</span>
+              </div>
+
+              <div class="timeline-list" id="auditTimelineList">
+                <!-- Injected dynamically by app.js -->
+              </div>
+            </div>
+
+          </div>
+        </div>
+      </section>
+
+      <!-- Real-Time Status Footer -->
+      <footer class="dash-footer-bar">
+        <div class="footer-left">
+          <span>● Mock Data Stream: <strong>Synced (1,402 Active Manifests)</strong></span>
+          <span>• Verification Rule Pack: <strong>v2026.04</strong></span>
+          <span>• OCR Precision Engine: <strong>99.82%</strong></span>
+        </div>
+        <div class="footer-right">
+          <span class="live-dot" style="background:#10b981"></span>
+          <span id="liveClockUtc">UTC 14:32:08</span>
+        </div>
+      </footer>
+    </section>
+  </div>
+
+  <!-- ==========================================================================
+       MODAL: DAILY DIGEST (DESIGN.md §2.8)
+       ========================================================================== -->
+  <div class="modal-backdrop" id="modalDailyDigest">
+    <div class="modal-window">
+      <div class="modal-header">
+        <div class="modal-title">Daily Operations Digest</div>
+        <button class="modal-close-btn" id="btnCloseDailyDigest">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
+        </button>
+      </div>
+      <div class="modal-body" id="dailyDigestContent">
+        <!-- Dynamically rendered -->
+      </div>
+    </div>
+  </div>
+
+  <!-- ==========================================================================
+       MODAL: REVIEW / CORRECTION INTERFACE (DESIGN.md §2.7)
+       ========================================================================== -->
+  <div class="modal-backdrop" id="modalCorrection">
+    <div class="modal-window">
+      <div class="modal-header">
+        <div class="modal-title" id="modalCorrectionTitle">Review &amp; Correct Value</div>
+        <button class="modal-close-btn" id="btnCloseCorrection">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
+        </button>
+      </div>
+      <div class="modal-body" id="modalCorrectionBody">
+        <!-- Dynamically rendered -->
+      </div>
+    </div>
+  </div>
+
+  <!-- ==========================================================================
+       MODAL: ANALYTICS & ACCURACY (DESIGN.md §2.5)
+       ========================================================================== -->
+  <div class="modal-backdrop" id="modalAnalytics">
+    <div class="modal-window" style="max-width:720px;">
+      <div class="modal-header">
+        <div class="modal-title">Accuracy Progression &amp; Analytics</div>
+        <button class="modal-close-btn" id="btnCloseAnalytics">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
+        </button>
+      </div>
+      <div class="modal-body">
+        <div style="font-size:13px; color:var(--text-secondary); margin-bottom:14px;">
+          Model performance progression measured across consecutive <code style="font-family:var(--font-mono); background:#f1f5f9; padding:2px 6px; border-radius:4px;">score_cli.py</code> benchmark runs:
+        </div>
+        <div style="height:220px; width:100%; background:#f8fafc; border:1px solid var(--border-subtle); border-radius:12px; padding:12px; margin-bottom:20px;">
+          <canvas id="detailedChartCanvas" style="width:100%; height:100%;"></canvas>
+        </div>
+        <div style="display:grid; grid-template-columns:repeat(3, 1fr); gap:12px; text-align:center;">
+          <div style="background:#ffffff; border:1px solid var(--border-subtle); padding:12px; border-radius:8px;">
+            <div style="font-size:10px; font-weight:800; color:var(--text-muted); text-transform:uppercase;">Stage 1 Macro-F1</div>
+            <div style="font-size:24px; font-weight:800; color:#0f172a;" id="benchStage1F1">78.2%</div>
+            <div style="font-size:11px; color:var(--text-muted); margin-top:2px;" id="benchStage1Sub">Accuracy: 75.8% • 520 emails</div>
+          </div>
+          <div style="background:#ffffff; border:1px solid var(--border-subtle); padding:12px; border-radius:8px;">
+            <div style="font-size:10px; font-weight:800; color:var(--text-muted); text-transform:uppercase;">Stage 3 Field-Level F1</div>
+            <div style="font-size:24px; font-weight:800; color:var(--primary-orange);" id="benchStage3F1">98.6%</div>
+            <div style="font-size:11px; color:var(--text-muted); margin-top:2px;" id="benchStage3Sub">Recall: 97.8% • Precision: 100%</div>
+          </div>
+          <div style="background:#ffffff; border:1px solid var(--border-subtle); padding:12px; border-radius:8px;">
+            <div style="font-size:10px; font-weight:800; color:var(--text-muted); text-transform:uppercase;">Official End-to-End Score</div>
+            <div style="font-size:24px; font-weight:800; color:#059669;" id="benchEndToEndScore">91.06%</div>
+            <div style="font-size:11px; color:var(--text-muted); margin-top:2px;" id="benchEndToEndSub">E2E Success: 95.7% (44/46)</div>
+          </div>
+        </div>
+
+        <div style="margin-top:14px; background:#f8fafc; border:1px solid var(--border-subtle); border-radius:10px; padding:12px 16px; font-size:12px; color:#334155; line-height:1.6;">
+          <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:4px; flex-wrap:wrap; gap:6px;">
+            <span><strong>Official Hackathon Score Formula:</strong> <code style="font-family:var(--font-mono); background:#ffffff; border:1px solid var(--border-subtle); padding:1px 5px; border-radius:4px;">0.30 × Stage1 + 0.20 × Stage3 + 0.50 × E2E</code></span>
+            <span style="font-weight:800; color:#059669; font-family:var(--font-mono); font-size:13px;" id="benchFormulaScore">= 0.9106 (91.06%)</span>
+          </div>
+          <div style="color:var(--text-muted); font-size:11px;">
+            Verified against <code style="font-family:var(--font-mono);">ground_truth.json</code> via <code style="font-family:var(--font-mono);">score_cli.py</code>: Stage 3 Defect Recall <strong>97.8%</strong> &bull; Defect Precision <strong>100.0%</strong> &bull; Field-level F1 <strong>98.6%</strong> &bull; Escalation Reliability <strong>100.0%</strong>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ==========================================================================
+       MODAL: EVALUATION SCOPE & ARCHITECTURE (From Cover Design)
+       ========================================================================== -->
+  <div class="modal-backdrop" id="modalScope">
+    <div class="modal-window" style="max-width:760px;">
+      <div class="modal-header">
+        <div style="display:flex; align-items:center; gap:8px;">
+          <span class="live-dot" style="background:var(--primary-orange)"></span>
+          <div class="modal-title">Evaluation Scope • 520 Shipping Emails Benchmark</div>
+        </div>
+        <button class="modal-close-btn" id="btnCloseScope">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
+        </button>
+      </div>
+      <div class="modal-body">
+        <div style="font-size:13.5px; color:#334155; line-height:1.6; margin-bottom:18px;">
+          This prototype evaluates autonomous maritime document triage across a curated benchmark of <strong>520 real-world freight emails</strong>. Rather than marketing claims, the system is measured on deterministic extraction parity across 7 essential shipping attributes in under 42 seconds.
+        </div>
+
+        <div style="display:grid; grid-template-columns: 1fr 1fr; gap:16px; margin-bottom:20px;">
+          <div style="background:#f8fafc; border:1px solid var(--border-subtle); border-radius:12px; padding:14px;">
+            <div style="font-size:11px; font-weight:800; text-transform:uppercase; color:var(--text-muted); margin-bottom:10px;">
+              5 Evaluated Email Categories:
+            </div>
+            <div style="display:flex; flex-direction:column; gap:8px; font-size:12px;">
+              <div style="display:flex; justify-content:space-between; align-items:center; background:#ffffff; padding:6px 10px; border-radius:6px; border:1px solid #e2e8f0;">
+                <span style="font-weight:600; color:#0f172a;">BL Comparison</span>
+                <span style="font-family:var(--font-mono); font-weight:700; color:var(--primary-orange);">240 emails</span>
+              </div>
+              <div style="display:flex; justify-content:space-between; align-items:center; background:#ffffff; padding:6px 10px; border-radius:6px; border:1px solid #e2e8f0;">
+                <span style="font-weight:600; color:#0f172a;">SI Request</span>
+                <span style="font-family:var(--font-mono); font-weight:700; color:#475569;">118 emails</span>
+              </div>
+              <div style="display:flex; justify-content:space-between; align-items:center; background:#ffffff; padding:6px 10px; border-radius:6px; border:1px solid #e2e8f0;">
+                <span style="font-weight:600; color:#0f172a;">Invoice Query</span>
+                <span style="font-family:var(--font-mono); font-weight:700; color:#475569;">76 emails</span>
+              </div>
+              <div style="display:flex; justify-content:space-between; align-items:center; background:#ffffff; padding:6px 10px; border-radius:6px; border:1px solid #e2e8f0;">
+                <span style="font-weight:600; color:#0f172a;">General Operations</span>
+                <span style="font-family:var(--font-mono); font-weight:700; color:#475569;">54 emails</span>
+              </div>
+              <div style="display:flex; justify-content:space-between; align-items:center; background:#ffffff; padding:6px 10px; border-radius:6px; border:1px solid #e2e8f0;">
+                <span style="font-weight:600; color:#0f172a;">Spam / Filtered</span>
+                <span style="font-family:var(--font-mono); font-weight:700; color:#94a3b8;">32 emails</span>
+              </div>
+            </div>
+          </div>
+
+          <div style="background:#f8fafc; border:1px solid var(--border-subtle); border-radius:12px; padding:14px;">
+            <div style="font-size:11px; font-weight:800; text-transform:uppercase; color:var(--text-muted); margin-bottom:10px;">
+              7 Compared Document Attributes:
+            </div>
+            <div style="display:grid; grid-template-columns: 1fr; gap:6px; font-size:12px;">
+              <div style="display:flex; align-items:center; gap:8px; background:#ffffff; padding:5px 10px; border-radius:6px; border:1px solid #e2e8f0;">
+                <span style="width:6px; height:6px; border-radius:50%; background:var(--primary-orange);"></span>
+                <span>Shipper / Exporter Legal Entity</span>
+              </div>
+              <div style="display:flex; align-items:center; gap:8px; background:#ffffff; padding:5px 10px; border-radius:6px; border:1px solid #e2e8f0;">
+                <span style="width:6px; height:6px; border-radius:50%; background:var(--primary-orange);"></span>
+                <span>Consignee Legal Name</span>
+              </div>
+              <div style="display:flex; align-items:center; gap:8px; background:#ffffff; padding:5px 10px; border-radius:6px; border:1px solid #e2e8f0;">
+                <span style="width:6px; height:6px; border-radius:50%; background:var(--primary-orange);"></span>
+                <span>Notify Party Entity</span>
+              </div>
+              <div style="display:flex; align-items:center; gap:8px; background:#ffffff; padding:5px 10px; border-radius:6px; border:1px solid #e2e8f0;">
+                <span style="width:6px; height:6px; border-radius:50%; background:var(--primary-orange);"></span>
+                <span>Gross Cargo Weight &amp; Units</span>
+              </div>
+              <div style="display:flex; align-items:center; gap:8px; background:#ffffff; padding:5px 10px; border-radius:6px; border:1px solid #e2e8f0;">
+                <span style="width:6px; height:6px; border-radius:50%; background:var(--primary-orange);"></span>
+                <span>Container ID &amp; Seal Number</span>
+              </div>
+              <div style="display:flex; align-items:center; gap:8px; background:#ffffff; padding:5px 10px; border-radius:6px; border:1px solid #e2e8f0;">
+                <span style="width:6px; height:6px; border-radius:50%; background:var(--primary-orange);"></span>
+                <span>Port of Loading (POL)</span>
+              </div>
+              <div style="display:flex; align-items:center; gap:8px; background:#ffffff; padding:5px 10px; border-radius:6px; border:1px solid #e2e8f0;">
+                <span style="width:6px; height:6px; border-radius:50%; background:var(--primary-orange);"></span>
+                <span>Port of Discharge (POD)</span>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div style="display:grid; grid-template-columns: repeat(3, 1fr); gap:12px; text-align:center;">
+          <div style="background:#ecfdf5; border:1px solid #a7f3d0; padding:10px; border-radius:8px;">
+            <div style="font-size:10px; font-weight:800; color:#065f46;">TRIAGE OUTCOME 1</div>
+            <div style="font-size:14px; font-weight:800; color:#047857; margin-top:2px;">Auto-Cleared</div>
+            <div style="font-size:11px; color:#065f46; margin-top:2px;">Confidence &ge; 98%</div>
+          </div>
+          <div style="background:#fef2f2; border:1px solid #fecaca; padding:10px; border-radius:8px;">
+            <div style="font-size:10px; font-weight:800; color:#991b1b;">TRIAGE OUTCOME 2</div>
+            <div style="font-size:14px; font-weight:800; color:#dc2626; margin-top:2px;">Discrepancy Found</div>
+            <div style="font-size:11px; color:#991b1b; margin-top:2px;">Carrier Notice Queued</div>
+          </div>
+          <div style="background:#fffbeb; border:1px solid #fde68a; padding:10px; border-radius:8px;">
+            <div style="font-size:10px; font-weight:800; color:#92400e;">TRIAGE OUTCOME 3</div>
+            <div style="font-size:14px; font-weight:800; color:#d97706; margin-top:2px;">Needs Review</div>
+            <div style="font-size:11px; color:#92400e; margin-top:2px;">Human In The Loop</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <script src="./app.js"></script>
+</body>
+</html>

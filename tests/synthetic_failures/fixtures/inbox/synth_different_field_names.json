@@ -1,0 +1,10 @@
+{
+  "email_id": "synth_different_field_names",
+  "subject": "Custom Carrier Format SI vs BL \u2014 SI-SYNTH-2026-05",
+  "sender": "operations@pacific-logistics.com",
+  "body": "Carrier uses alternate maritime terminology on draft BL. Validating semantic alignment.",
+  "attachments": [
+    "attachments/email_synth_different_field_names_SI.txt",
+    "attachments/email_synth_different_field_names_BL.txt"
+  ]
+}

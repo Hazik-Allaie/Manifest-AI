@@ -1,0 +1,31 @@
+# Manifest AI — project dependencies
+# See docs/TECHSTACK.md §3 for rationale.
+
+# ── Google Cloud ──────────────────────────────────────────────────
+google-cloud-aiplatform>=1.60,<2.0
+google-cloud-firestore>=2.16,<3.0
+google-cloud-pubsub>=2.21,<3.0
+google-cloud-storage>=2.16,<3.0
+
+# ── Agent orchestration ──────────────────────────────────────────
+langgraph>=0.2,<1.0
+
+# ── Data contract ────────────────────────────────────────────────
+pydantic>=2.7,<3.0
+
+# ── Document parsing ─────────────────────────────────────────────
+python-docx>=1.1,<2.0
+openpyxl>=3.1,<4.0
+pypdf>=4.2,<5.0
+pdfplumber>=0.11,<1.0
+reportlab>=4.0,<6.0
+
+# ── Fuzzy matching ───────────────────────────────────────────────
+python-Levenshtein>=0.25,<1.0
+
+# ── Dashboard / API ──────────────────────────────────────────────
+fastapi>=0.110,<1.0
+uvicorn[standard]>=0.27,<1.0
+
+# ── Config loading ───────────────────────────────────────────────
+python-dotenv>=1.0,<2.0

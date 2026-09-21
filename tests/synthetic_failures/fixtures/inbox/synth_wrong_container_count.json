@@ -1,0 +1,10 @@
+{
+  "email_id": "synth_wrong_container_count",
+  "subject": "Document Check: SI vs BL Container Count \u2014 SI-SYNTH-2026-01",
+  "sender": "operations@pacific-logistics.com",
+  "body": "Please verify the attached Shipping Instruction and draft Bill of Lading for container discrepancy.",
+  "attachments": [
+    "attachments/email_synth_wrong_container_count_SI.txt",
+    "attachments/email_synth_wrong_container_count_BL.txt"
+  ]
+}

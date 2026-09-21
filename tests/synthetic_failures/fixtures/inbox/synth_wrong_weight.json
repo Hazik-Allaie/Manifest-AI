@@ -1,0 +1,10 @@
+{
+  "email_id": "synth_wrong_weight",
+  "subject": "Weight Discrepancy Alert: SI vs BL \u2014 SI-SYNTH-2026-02",
+  "sender": "operations@pacific-logistics.com",
+  "body": "Attached SI and draft BL for weight validation prior to container terminal cutoff.",
+  "attachments": [
+    "attachments/email_synth_wrong_weight_SI.txt",
+    "attachments/email_synth_wrong_weight_BL.txt"
+  ]
+}

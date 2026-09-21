@@ -1,0 +1,10 @@
+{
+  "email_id": "synth_wrong_doc_type",
+  "subject": "Erroneous Attachment: Commercial Invoice Attached \u2014 SI-SYNTH-2026-08",
+  "sender": "operations@pacific-logistics.com",
+  "body": "Shipping Instruction attached alongside vendor Commercial Invoice by mistake.",
+  "attachments": [
+    "attachments/email_synth_wrong_doc_type_SI.txt",
+    "attachments/email_synth_wrong_doc_type_BL.txt"
+  ]
+}

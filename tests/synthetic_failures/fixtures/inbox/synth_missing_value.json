@@ -1,0 +1,10 @@
+{
+  "email_id": "synth_missing_value",
+  "subject": "Draft BL with Incomplete Weight \u2014 SI-SYNTH-2026-09",
+  "sender": "operations@pacific-logistics.com",
+  "body": "Please note carrier draft BL has pending tare/gross weight marked as ???.",
+  "attachments": [
+    "attachments/email_synth_missing_value_SI.txt",
+    "attachments/email_synth_missing_value_BL.txt"
+  ]
+}

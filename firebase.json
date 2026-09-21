@@ -1,0 +1,26 @@
+{
+  "hosting": {
+    "public": "dashboard/frontend",
+    "ignore": [
+      "firebase.json",
+      "**/.*",
+      "**/node_modules/**"
+    ],
+    "rewrites": [
+      {
+        "source": "/api/**",
+        "run": {
+          "serviceId": "manifest-ai",
+          "region": "asia-southeast1"
+        }
+      },
+      {
+        "source": "/health",
+        "run": {
+          "serviceId": "manifest-ai",
+          "region": "asia-southeast1"
+        }
+      }
+    ]
+  }
+}

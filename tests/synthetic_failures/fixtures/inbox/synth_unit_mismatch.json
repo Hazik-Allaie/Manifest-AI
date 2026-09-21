@@ -1,0 +1,10 @@
+{
+  "email_id": "synth_unit_mismatch",
+  "subject": "Destination Port Discrepancy \u2014 SI-SYNTH-2026-04",
+  "sender": "operations@pacific-logistics.com",
+  "body": "Destination port differs between SI and draft BL. Review urgently.",
+  "attachments": [
+    "attachments/email_synth_unit_mismatch_SI.txt",
+    "attachments/email_synth_unit_mismatch_BL.txt"
+  ]
+}
