@@ -23,11 +23,12 @@ Manifest AI reads a shipping operations inbox, classifies every email, and for d
 | Role | Name | Contact / Focus |
 |---|---|---|
 | **Team Leader** | **Hazik Allaie** | [linkedin.com/in/hazik-allaie](http://linkedin.com/in/hazik-allaie) · +91 88998 33950 |
-| **Orchestration Lead** | Person A | Multi-agent pipeline, error recovery, classifier evidence |
-| **Extraction Lead** | Person B | Gemini Vision, multi-format document parsing |
-| **Matching & Ensemble Lead** | Person C | Semantic field matching, weighted ensemble voting |
-| **Trust & Interface Lead** | Person D | Confidence escalation, audit dashboard |
-| **Infra & Learning Lead** | Person E | Real-time architecture, self-improving feedback loop |
+| **Orchestration Lead** | **Hazik & Bilal** | Multi-agent pipeline, error recovery, classifier evidence |
+| **Extraction Lead** | **Hazik & Bilal** | Gemini Vision, multi-format document parsing |
+| **Matching & Ensemble Lead** | **Hazik & Bilal** | Semantic field matching, weighted ensemble voting |
+| **Trust & Interface Lead** | **Hazik & Bilal** | Confidence escalation, audit dashboard |
+| **Infra & Learning Lead** | **Hazik & Bilal** | Real-time architecture, self-improving feedback loop |
+| **Frontend UI** | **Yeo , Ivan  & Chan** | Designing Front UI |
 
 #### 🎯 The Problem
 Shipping operations teams receive mixed inboxes — document-comparison requests, new SI requests, invoice queries, general messages, spam — all in one place. For document-comparison requests, staff must manually cross-check a Shipping Instruction (SI), the source of truth, against a draft Bill of Lading (BL) before it's finalized. This is slow, repetitive, and error-prone — and the same field is often labeled differently across documents ("Port of Loading" vs "Load Port"), causing missed or false discrepancies.
