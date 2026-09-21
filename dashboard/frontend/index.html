@@ -628,47 +628,49 @@
       </div>
 
       <!-- 3-Column Kanban Board -->
-      <div class="kanban-grid">
-        <!-- Column 1: Auto-Cleared -->
-        <div class="kanban-column">
-          <div class="col-header">
-            <div class="col-title-group">
-              <span class="live-dot" style="background:#10b981"></span>
-              <span class="col-title">Auto-Cleared</span>
-              <span class="col-count-badge col-count-green" id="badgeCountAuto">2</span>
+      <div class="kanban-board-wrapper">
+        <div class="kanban-grid">
+          <!-- Column 1: Auto-Cleared -->
+          <div class="kanban-column">
+            <div class="col-header">
+              <div class="col-title-group">
+                <span class="live-dot" style="background:#10b981"></span>
+                <span class="col-title">Auto-Cleared</span>
+                <span class="col-count-badge col-count-green" id="badgeCountAuto">2</span>
+              </div>
+              <span class="col-meta-tag">Confidence ≥ 98%</span>
             </div>
-            <span class="col-meta-tag">Confidence ≥ 98%</span>
+
+            <div id="kanbanColAutoCleared" class="kanban-cards-scroll-area"></div>
           </div>
 
-          <div id="kanbanColAutoCleared" style="display:flex; flex-direction:column; gap:12px;"></div>
-        </div>
-
-        <!-- Column 2: Discrepancy Found -->
-        <div class="kanban-column">
-          <div class="col-header">
-            <div class="col-title-group">
-              <span class="live-dot" style="background:#ef4444"></span>
-              <span class="col-title">Discrepancy Found</span>
-              <span class="col-count-badge col-count-red" id="badgeCountMismatch">2</span>
+          <!-- Column 2: Discrepancy Found -->
+          <div class="kanban-column">
+            <div class="col-header">
+              <div class="col-title-group">
+                <span class="live-dot" style="background:#ef4444"></span>
+                <span class="col-title">Discrepancy Found</span>
+                <span class="col-count-badge col-count-red" id="badgeCountMismatch">2</span>
+              </div>
+              <span class="col-meta-tag" style="color:#dc2626; font-weight:700;">Action Required</span>
             </div>
-            <span class="col-meta-tag" style="color:#dc2626; font-weight:700;">Action Required</span>
+
+            <div id="kanbanColDiscrepancy" class="kanban-cards-scroll-area"></div>
           </div>
 
-          <div id="kanbanColDiscrepancy" style="display:flex; flex-direction:column; gap:12px;"></div>
-        </div>
-
-        <!-- Column 3: Exception / Needs Review -->
-        <div class="kanban-column">
-          <div class="col-header">
-            <div class="col-title-group">
-              <span class="live-dot" style="background:#f59e0b"></span>
-              <span class="col-title">Needs Review</span>
-              <span class="col-count-badge col-count-amber" id="badgeCountReview">2</span>
+          <!-- Column 3: Exception / Needs Review -->
+          <div class="kanban-column">
+            <div class="col-header">
+              <div class="col-title-group">
+                <span class="live-dot" style="background:#f59e0b"></span>
+                <span class="col-title">Needs Review</span>
+                <span class="col-count-badge col-count-amber" id="badgeCountReview">2</span>
+              </div>
+              <span class="col-meta-tag">Schema Exceptions</span>
             </div>
-            <span class="col-meta-tag">Schema Exceptions</span>
-          </div>
 
-          <div id="kanbanColNeedsReview" style="display:flex; flex-direction:column; gap:8px;"></div>
+            <div id="kanbanColNeedsReview" class="kanban-cards-scroll-area" style="gap:8px;"></div>
+          </div>
         </div>
       </div>
 

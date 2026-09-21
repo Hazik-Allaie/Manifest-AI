@@ -899,9 +899,10 @@ body {
    ========================================================================== */
 .dashboard-view {
   display: grid;
-  grid-template-columns: 240px 1fr;
+  grid-template-columns: 240px minmax(0, 1fr);
   min-height: calc(100vh - 68px);
   background: #f8fafc;
+  width: 100%;
 }
 
 /* Sidebar */
@@ -1022,7 +1023,10 @@ body {
 .dash-main {
   padding: 24px 28px 60px;
   overflow-y: auto;
-  max-width: 1600px;
+  width: 100%;
+  max-width: 100%;
+  min-width: 0;
+  box-sizing: border-box;
 }
 
 /* ==========================================================================
@@ -1078,7 +1082,8 @@ body {
 .command-search-box {
   position: relative;
   flex: 1;
-  max-width: 480px;
+  max-width: 560px;
+  min-width: 240px;
 }
 
 .command-search-input {
@@ -1363,32 +1368,104 @@ body {
   color: var(--text-primary);
 }
 
+/* Contained Horizontal Scroll Wrapper for Kanban */
+.kanban-board-wrapper {
+  width: 100%;
+  overflow-x: auto;
+  overflow-y: hidden;
+  padding-bottom: 12px;
+  margin-bottom: 32px;
+  -webkit-overflow-scrolling: touch;
+}
+
+/* Sleek custom scrollbars for kanban board and columns */
+.kanban-board-wrapper::-webkit-scrollbar {
+  height: 8px;
+}
+.kanban-board-wrapper::-webkit-scrollbar-track {
+  background: #e2e8f0;
+  border-radius: 4px;
+}
+.kanban-board-wrapper::-webkit-scrollbar-thumb {
+  background: #cbd5e1;
+  border-radius: 4px;
+}
+.kanban-board-wrapper::-webkit-scrollbar-thumb:hover {
+  background: #94a3b8;
+}
+
 /* 3-Column Kanban Board */
 .kanban-grid {
-  display: grid;
-  grid-template-columns: repeat(3, 1fr);
+  display: flex;
   gap: 20px;
-  margin-bottom: 32px;
-  align-items: start;
+  width: 100%;
+  min-width: 1100px;
+  align-items: stretch;
 }
 
 .kanban-column {
+  flex: 1 1 0;
+  min-width: 350px;
+  height: clamp(580px, calc(100vh - 360px), 820px);
   background: #f1f5f9;
   border: 1px solid var(--border-subtle);
   border-radius: var(--radius-lg);
   padding: 16px;
-  min-height: 480px;
   display: flex;
   flex-direction: column;
-  gap: 12px;
+  overflow: hidden;
+  box-sizing: border-box;
 }
 
 .col-header {
+  flex-shrink: 0;
   display: flex;
   align-items: center;
   justify-content: space-between;
   padding-bottom: 12px;
   border-bottom: 1px solid #e2e8f0;
+  margin-bottom: 12px;
+}
+
+/* Scrollable Cards Container inside each column (Zero Dead Space) */
+.kanban-cards-scroll-area,
+#kanbanColAutoCleared,
+#kanbanColDiscrepancy,
+#kanbanColNeedsReview {
+  flex: 1 1 auto;
+  min-height: 0;
+  overflow-y: auto;
+  overflow-x: hidden;
+  padding-right: 6px;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+#kanbanColNeedsReview {
+  gap: 8px;
+}
+
+#kanbanColAutoCleared::-webkit-scrollbar,
+#kanbanColDiscrepancy::-webkit-scrollbar,
+#kanbanColNeedsReview::-webkit-scrollbar {
+  width: 6px;
+}
+#kanbanColAutoCleared::-webkit-scrollbar-track,
+#kanbanColDiscrepancy::-webkit-scrollbar-track,
+#kanbanColNeedsReview::-webkit-scrollbar-track {
+  background: transparent;
+}
+#kanbanColAutoCleared::-webkit-scrollbar-thumb,
+#kanbanColDiscrepancy::-webkit-scrollbar-thumb,
+#kanbanColNeedsReview::-webkit-scrollbar-thumb {
+  background: #cbd5e1;
+  border-radius: 3px;
+}
+#kanbanColAutoCleared::-webkit-scrollbar-thumb:hover,
+#kanbanColDiscrepancy::-webkit-scrollbar-thumb:hover,
+#kanbanColNeedsReview::-webkit-scrollbar-thumb:hover {
+  background: #94a3b8;
 }
 
 .col-title-group {
@@ -1433,6 +1510,7 @@ body {
 }
 
 .subgroup-header {
+  flex-shrink: 0;
   font-size: 10px;
   font-weight: 800;
   text-transform: uppercase;
@@ -1447,6 +1525,7 @@ body {
 
 /* Kanban Cards */
 .kanban-card {
+  flex-shrink: 0;
   background: #ffffff;
   border: 1px solid var(--border-card);
   border-radius: var(--radius-md);
@@ -1475,6 +1554,21 @@ body {
   display: flex;
   align-items: center;
   justify-content: space-between;
+  gap: 8px;
+  flex-wrap: wrap;
+}
+
+.badge-tag-mismatch,
+.badge-tag-verified,
+.badge-variance {
+  font-size: 10.5px;
+  font-weight: 800;
+  padding: 2px 7px;
+  border-radius: var(--radius-xs);
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  white-space: nowrap;
 }
 
 .card-ref-id {
@@ -2471,9 +2565,6 @@ body {
   }
   .kpi-grid {
     grid-template-columns: repeat(2, 1fr);
-  }
-  .kanban-grid {
-    grid-template-columns: 1fr;
   }
   .inspector-main-grid {
     grid-template-columns: 1fr;
