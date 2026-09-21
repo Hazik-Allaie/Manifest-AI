@@ -9,6 +9,41 @@
 
 ---
 
+### Zero Demurrage. Decisions You Can Trust.
+Manifest AI reads a shipping operations inbox, classifies every email, and for document-comparison requests, automatically cross-verifies a draft Bill of Lading against its Shipping Instruction across 7 canonical fields — clearing clean matches instantly and escalating anything it can't confidently decide, with full evidence, to a human reviewer.
+
+#### 🔗 Live Links
+| Resource | Link / Score |
+|---|---|
+| **Live Dashboard** | [manifest-ai-509207.web.app](https://manifest-ai-509207.web.app) |
+| **Backend API (Cloud Run)** | [https://manifest-ai-337850345503.asia-southeast1.run.app](https://manifest-ai-337850345503.asia-southeast1.run.app) |
+| **Benchmark Score** | **91.06%** (verified via `score_cli.py` against the organizer's 520-email dataset) |
+
+#### 👥 Team Beta
+| Role | Name | Contact / Focus |
+|---|---|---|
+| **Team Leader** | **Hazik Allaie** | [linkedin.com/in/hazik-allaie](http://linkedin.com/in/hazik-allaie) · +91 88998 33950 |
+| **Orchestration Lead** | Person A | Multi-agent pipeline, error recovery, classifier evidence |
+| **Extraction Lead** | Person B | Gemini Vision, multi-format document parsing |
+| **Matching & Ensemble Lead** | Person C | Semantic field matching, weighted ensemble voting |
+| **Trust & Interface Lead** | Person D | Confidence escalation, audit dashboard |
+| **Infra & Learning Lead** | Person E | Real-time architecture, self-improving feedback loop |
+
+#### 🎯 The Problem
+Shipping operations teams receive mixed inboxes — document-comparison requests, new SI requests, invoice queries, general messages, spam — all in one place. For document-comparison requests, staff must manually cross-check a Shipping Instruction (SI), the source of truth, against a draft Bill of Lading (BL) before it's finalized. This is slow, repetitive, and error-prone — and the same field is often labeled differently across documents ("Port of Loading" vs "Load Port"), causing missed or false discrepancies.
+
+#### 💡 The Solution
+Manifest AI automates the full pipeline:
+- **Classify** — every email into `BL_COMPARISON`, `SI_REQUEST`, `INVOICE_QUERY`, `GENERAL`, or `SPAM`
+- **Extract** — 7 canonical fields from SI/BL attachments, across plain text, PDF, DOCX, XLSX, and scanned images
+- **Compare** — field-by-field, recognizing semantically equivalent labels via a synonym dictionary + embeddings fallback
+- **Escalate** — never guesses. A blank field, missing attachment, unreadable scan, or wrong document type routes to a human with full evidence, never silently misreported as a false match or false mismatch
+
+#### 🧠 The 7 Compared Fields
+`shipper` · `consignee` · `notify_party` · `port_of_loading` · `port_of_discharge` · `container_count` · `gross_weight_kg`
+
+---
+
 ## 🌟 Key Highlights & Performance Scorecard
 
 Evaluated rigorously on the **SDOC Hackathon benchmark dataset (520 emails)** using the official evaluator `score_cli.py`:
